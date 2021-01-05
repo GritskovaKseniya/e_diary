@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col"><h4>Расписание на сегодня </h4></div>
+  </div>
+  <table class="table table-bordered table-striped">
+      <tr><th class="width-number">№</th><th class="width-time">Время</th><th class="width-lesson">Урок</th><th>Домашнее задание</th></tr>
+      {% for lesson in timetable %}
+      <div class=" name-output">
+      <tr>
+        <td>{{lesson.number}}</td><td>{{lesson.time}}</td><td>{{lesson.title}}</td><td>{{lesson.homework}}</td>
+      </tr>
+      </div>
+      {% endfor %}
+  </table>
+</div>
+{% endblock %}

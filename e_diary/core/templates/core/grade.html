@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Оценки{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+      <div class="col-2"><button type="button" class="btn btn-outline-dark" onclick="rewindDate('prev', 7)"><<</button></div>
+      <div class="col text-center"><h4>Оценки на {{weekday_string}}</h4></div>
+      <div class="col-2"><button type="button" class="btn btn-outline-dark float-right" onclick="rewindDate('next', 7)">>></button></div>
+  </div>
+  <table class="table table-bordered table-striped mt-5">
+      <tr>
+          <th class="width-20">Предмет</th>
+          {% for day in week %}
+            <th class="width-20">{{day.date}}</th>
+          {% endfor %}
+      </tr>
+      {% for lesson in grades %}
+        <tr>
+            <td>{{lesson.lesson}}</td>
+                {% for day in lesson.days_and_grades %}
+                    <th>
+                        {% for grade in day.grades %}
+                            {% if grade.type == 4 %}
+                                <span class="grade-hw font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                            {% if grade.type == 3 %}
+                                <span class="grade-ct font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                            {% if grade.type == 2 %}
+                                <span class="grade-t font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                            {% if grade.type == 1 %}
+                                <span class="grade-cw font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </th>
+                {% endfor %}
+        </tr>
+      {% endfor %}
+  </table>
+    <div class="container">
+        <h6 class="grade-hw">Оценка за домашнее задание </h6>
+        <h6 class="grade-t">Оценка за самостоятельную работу </h6>
+        <h6 class="grade-cw">Оценка за работу на уроке </h6>
+        <h6 class="grade-ct">Оценка за контрольную работу </h6>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% endblock %}
