@@ -1,9 +1,10 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import User
 
 
 class Classes(models.Model):
-    number = models.CharField(max_length=7, unique=True)
+    number = models.CharField(max_length=7)
 
     def __str__(self):
         return self.number
@@ -13,21 +14,12 @@ class Classes(models.Model):
         verbose_name_plural = 'Классы'
 
 
-class Users(models.Model):
-    login = models.CharField('Логин', unique=True, max_length=200)
-    password = models.CharField('Пароль', max_length=200)
+class Students(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
     name = models.CharField('ФИО', max_length=200)
-    is_active = models.BooleanField('Работает/Учится', default=True)
-
-    def __str__(self):
-        return self.login
-
-    class Meta:
-        abstract = True
-
-
-class Students(Users):
     user_class = models.ForeignKey(Classes, on_delete=models.PROTECT)
+    year_of_study = models.CharField(max_length=9)
+    is_active = models.BooleanField('Учится сейчас', default=True)
 
     def __str__(self):
         return self.name
@@ -37,8 +29,10 @@ class Students(Users):
         verbose_name_plural = 'Ученики'
 
 
-class Teachers(Users):
-    pass
+class Teachers(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    name = models.CharField('ФИО', max_length=200)
+    is_active = models.BooleanField('Учит сейчас', default=True)
 
     def __str__(self):
         return self.name
@@ -143,8 +137,3 @@ class Grade(models.Model):
     class Meta:
         verbose_name = 'Оценка'
         verbose_name_plural = 'Оценки'
-
-
-class LogUser(models.Model):
-    key = models.ForeignKey(Students, on_delete=models.PROTECT)
-

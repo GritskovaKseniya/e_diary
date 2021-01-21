@@ -14,28 +14,33 @@
 </head>
 
 <body>
-<div class="container">
-  <h2 class="text-center">Вход</h2>
-  <form method="POST" action="{% url 'core:form' %}">
-    {% csrf_token %}
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="login">Login:</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="login" placeholder="Enter login" name="login">
+<div class="container mt-50">
+  <h3 class="text-center">Sign in to E-DIARY</h3>
+  {% if text %}
+  <div class="mx-auto w-30">
+    <div class="alert alert alert-danger alert-dismissible fade show mt-3 color-mg" role="alert">
+      <span class="strong">{{text}}</span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div></div>
+  {% endif %}
+  <div class="auth-form-body mt-3 w-30 mx-auto rounded-sm">
+    <form method="POST" action="{% url 'core:form' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="username">Login</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter login" name="username">
       </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="pwd">Пароль:</label>
-      <div class="col-sm-10">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="pwd">Password</label>
         <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
       </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <input type="submit" value="Вход" class="btn btn-light"/>
+      <div class="form-group">
+        <input type="submit" value="Sign in" class="btn btn-primary btn-block btn-st" data-disable-with="Singing in..."/>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 
 </body>

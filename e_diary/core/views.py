@@ -6,27 +6,29 @@ import datetime
 from core.models import *
 from django.core.exceptions import ObjectDoesNotExist
 from core.utils import *
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def main(request):
-    if len(LogUser.objects.all()) == 0:
-        return redirect('/form')
     url_name = request.resolver_match.url_name
-    user = LogUser.objects.all()[0].key
-    user_name = user.name
-    user_class = user.user_class
+    user = request.user
+    student = Students.objects.filter(user=user)[0]
+    user_name = student.name
+    user_class = student.user_class
     today = date.today()
     return render(request, 'core/main.html', {'url_name': url_name, 'class': user_class, 'name': user_name,
                                               'timetable': get_timetable(today, user_class)})
 
 
+@login_required
 def homework(request):
-    if len(LogUser.objects.all()) == 0:
-        return redirect('/form')
     url_name = request.resolver_match.url_name
-    user = LogUser.objects.all()[0].key
-    user_name = user.name
-    user_class = user.user_class
+    user = request.user
+    student = Students.objects.filter(user=user)[0]
+    user_name = student.name
+    user_class = student.user_class
     today = date.today()
     if request.GET.get('date') is not None:
         today = datetime.strptime(request.GET.get('date'), '%Y-%m-%d')
@@ -35,36 +37,36 @@ def homework(request):
                                                   'date': get_date_to_string(today)})
 
 
+@login_required
 def timetable(request):
-    if len(LogUser.objects.all()) == 0:
-        return redirect('/form')
     url_name = request.resolver_match.url_name
-    user = LogUser.objects.all()[0].key
-    user_name = user.name
-    user_class = user.user_class
+    user = request.user
+    student = Students.objects.filter(user=user)[0]
+    user_name = student.name
+    user_class = student.user_class
     today = date.today()
     return render(request, 'core/timetable.html', {'url_name': url_name, 'class': user_class, 'name': user_name,
                                                    'timetable': get_timetable_week(today, user_class)})
 
 
+@login_required
 def progress_table(request):
-    if len(LogUser.objects.all()) == 0:
-        return redirect('/form')
     url_name = request.resolver_match.url_name
-    user = LogUser.objects.all()[0].key
-    user_name = user.name
-    user_class = user.user_class
+    user = request.user
+    student = Students.objects.filter(user=user)[0]
+    user_name = student.name
+    user_class = student.user_class
     return render(request, 'core/progress_table.html', {'url_name': url_name, 'class': user_class, 'name': user_name,
                                                         'a': get_progress_table(user, user_class)})
 
 
+@login_required
 def grade(request):
-    if len(LogUser.objects.all()) == 0:
-        return redirect('/form')
     url_name = request.resolver_match.url_name
-    user = LogUser.objects.all()[0].key
-    user_name = user.name
-    user_class = user.user_class
+    user = request.user
+    student = Students.objects.filter(user=user)[0]
+    user_name = student.name
+    user_class = student.user_class
     lessons = OneLesson.objects.filter(a_class=user_class).filter(lesson__is_active=True).values('lesson__name').distinct()
     today = date.today()
     week = get_week(today)
@@ -79,28 +81,18 @@ def grade(request):
 
 def authorization(request):
     if request.method == 'POST':
-        login = request.POST.get('login')
-        password = request.POST.get('password')
-        try:
-            user = Students.objects.get(login=login, password=password)
-            print("USER ", Students.objects.all())
-            if len(LogUser.objects.filter(key=user)) > 0:
-                key = LogUser.objects.all()[0]
-                key.delete()
-                key = LogUser(key=user)
-                key.save()
-                return redirect('/')
-            else:
-                key = LogUser(key=user)
-                key.save()
-                return redirect('/')
-        except ObjectDoesNotExist:
-            return HttpResponse(status=400)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            return render(request, 'core/form.html', {'text': 'Incorrect username or password.'})
     else:
         return render(request, 'core/form.html')
 
 
-def quit(request):
-    user = LogUser.objects.all()[0]
-    user.delete()
-    return render(request, 'core/form.html')
+def logout_view(request):
+    logout(request)
+    return redirect('/form')

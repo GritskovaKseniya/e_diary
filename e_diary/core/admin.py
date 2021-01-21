@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Teachers, Lessons, Students, OneLesson, Grade, Classes, TimeSlot, LogUser
+from .models import Teachers, Lessons, Students, OneLesson, Grade, Classes, TimeSlot
 
 
 admin.site.register(Teachers)
@@ -9,5 +9,3 @@ admin.site.register(OneLesson)
 admin.site.register(Grade)
 admin.site.register(Classes)
 admin.site.register(TimeSlot)
-admin.site.register(LogUser)
-
