@@ -1,0 +1,30 @@
+{% extends 'teacher/base.html' %}
+
+{% block title %}Успеваемость таблица{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+      <div class="col text-center"><h4>Успеваемость</h4></div>
+  </div>
+
+  <table class="table table-bordered table-striped mt-3">
+  <tr><th>Предмет</th><th>Мой ср. балл за месяц</th><th>Ср. балл класса за месяц</th><th>Мой ср. б. за 1 ч</th><th>Ср. б. класса за 1 ч</th><th>Мой ср. б. за 2 ч</th><th>Ср. б. класса за 2 ч</th><th>Мой ср. б. за семестр</th><th>Ср. б. класса за семестр</th></tr>
+      {% for t in a %}
+      <div class=" name-output">
+      <tr>
+          {%for z in t%}
+          <td>{{z}}</td>
+          {%endfor%}
+      </tr>
+          {% endfor %}
+      </div>
+  </table>
+</div>
+
+{% endblock content %}
+
+
+
+
+

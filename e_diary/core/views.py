@@ -1,13 +1,9 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.db import models
-from datetime import date, datetime
 import datetime
-from core.models import *
-from django.core.exceptions import ObjectDoesNotExist
-from core.utils import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+from core.utils import *
 
 
 @login_required
@@ -88,7 +84,7 @@ def authorization(request):
             login(request, user)
             return redirect('/')
         else:
-            return render(request, 'core/form.html', {'text': 'Incorrect username or password.'})
+            return render(request, 'core/form.html', {'text': 'Incorrect login or password.'})
     else:
         return render(request, 'core/form.html')
 
