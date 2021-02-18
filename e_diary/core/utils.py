@@ -34,7 +34,7 @@ def get_timetable_week(date, user_class):
     while date_from <= date_to:
         result.append({'date': get_date_to_string(date_from), 'lessons': get_timetable(date_from, user_class)})
         date_from += dt.timedelta(days=1)
-    return result
+    return result[:-2]
 
 
 def get_week_with_weekday(date):

@@ -29,6 +29,12 @@ class Students(models.Model):
         verbose_name_plural = 'Ученики'
 
 
+class Parents(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    name = models.CharField('ФИО', max_length=200)
+    children = models.ManyToManyField(Students)
+
+
 class Teachers(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     name = models.CharField('ФИО', max_length=200)

@@ -82,7 +82,12 @@ def authorization(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/')
+            if len(Teachers.objects.filter(user=user)) != 0:
+                return redirect('/teacher')
+            elif len(Students.objects.filter(user=user)) != 0:
+                return redirect('/')
+            elif len(Parents.objects.filter(user=user)) != 0:
+                return redirect('/parent')
         else:
             return render(request, 'core/form.html', {'text': 'Incorrect login or password.'})
     else:
