@@ -8,18 +8,52 @@
   <div class="row">
     <div class="col text-center"><h4>Расписание на {{day.date}}</h4></div>
   </div>
-  <table class="table table-bordered table-striped mt-3">
-      <tr><th class="width-number">№</th><th class="width-time">Время</th><th class="width-lesson">Урок</th><th>Класс</th>
-          <th>Домашнее задание</th><th>Комментарий</th></tr>
+  <table class="table table-bordered mt-3">
+      <tr><th class="width-20">№</th><th class="width-120">Время</th><th class="width-230">Урок</th><th>Класс</th>
+          <th>Домашнее задание</th><th>Комментарий</th><th>id</th></tr>
       {% for lesson in day.lessons %}
       <div class=" name-output">
       <tr>
         <td>{{lesson.number}}</td><td>{{lesson.time}}</td><td>{{lesson.title}}</td><td>{{lesson.class}}</td>
-          <td>{{lesson.homework}}</td><td>{{lesson.comment}}</td>
+          <td >
+                {% if lesson.title != 'нет урока' %}
+                    <!-- Button trigger modal -->
+                    <button type="button" data-toggle="modal" data-target="#HomeWork" style="width: 100%; border: 0; background-color: black;">
+                        {{lesson.homework}}
+                    </button>
+                {% endif %}
+                {% if lesson.title == 'нет урока' %}{% endif %}
+            </td>
+          <td>{{lesson.comment}}</td>
+          <td>{{lesson.id}}</td>
       </tr>
       </div>
       {% endfor %}
   </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="HomeWork" tabindex="-1" aria-labelledby="HomeWorkLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="HomeWorkLabel">Домашнее задание </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label id="" for="HWText">{{lesson.title}} на {{day.date}}</label>
+                        <textarea class="form-control" id="HWText" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-success" id="HomeWorkSave">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

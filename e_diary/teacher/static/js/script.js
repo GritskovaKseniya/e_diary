@@ -37,3 +37,39 @@ function GETParamsAsObject() {
     return Object.fromEntries(searchString.split('&').map(item => item.split('='))) // получаем массив строк, который состоит из списка {переменная, значение}
     // Object.fromEntries собирает этот список списков в словарь
 }
+
+$("#save").click(()=>{
+    let id = $('#id').html();
+    let name = $('#name').val();
+    let description = $('#description').val();
+    $.ajax({
+        type: "POST",
+        url: window.location.origin + window.location.pathname,
+        data: {id, name, description},
+        success: (html)=>{
+            console.log(html);
+            window.location.replace(window.location.origin + window.location.pathname);
+        }
+    });
+    return false;
+})
+
+$("#HomeWorkSave").click(()=>{
+    let id = $().
+    let homework = $('#HWText').val();
+    $.ajax({
+        type: "POST",
+        url: window.location.origin + window.location.pathname,
+        data: {homework},
+        success: (html)=>{
+            console.log(html);
+            window.location.replace(window.location.origin + window.location.pathname);
+        }
+    });
+    $('#HomeWorkSave').modal('toggle')
+    return false;
+})
+
+$('#myModal').on('show.bs.modal', function (e) {
+
+})

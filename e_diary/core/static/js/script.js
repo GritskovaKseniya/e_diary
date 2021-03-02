@@ -37,3 +37,4 @@ function GETParamsAsObject() {
     return Object.fromEntries(searchString.split('&').map(item => item.split('='))) // получаем массив строк, который состоит из списка {переменная, значение}
     // Object.fromEntries собирает этот список списков в словарь
 }
+

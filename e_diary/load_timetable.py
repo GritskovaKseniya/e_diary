@@ -32,6 +32,9 @@ def add_timetable():
         try:
             lesson.save()
         except BaseException:
-            old_lesson = OneLesson.objects.filter(date=lesson.date, lesson_time=lesson.lesson_time, a_class=lesson.a_class)[0]
+            old_lesson = OneLesson.objects.filter(date=lesson.date, lesson_time=lesson.lesson_time,
+                                                  a_class=lesson.a_class)[0]
             old_lesson.delete()
             lesson.save()
+
+
