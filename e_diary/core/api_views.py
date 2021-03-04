@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -59,7 +60,9 @@ def username_get(request):
     return response_with_headers({'name': teacher_name})
 
 
+@login_required
 def timetable_week_get(request):
+    print(request.user)
     today = date.today()
     user = User.objects.filter(id=int(request.GET.get('user_id')))[0]
     timetable = get_timetable_week(today, user.id)

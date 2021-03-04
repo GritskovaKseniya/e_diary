@@ -128,6 +128,3 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Teacher frontend build files
-e_diary/students/static/*
-e_diary/students/templates/student/index.html

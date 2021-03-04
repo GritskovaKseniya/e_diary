@@ -1,0 +1,5 @@
+/assets
+/static/*
+asset-manifest.json
+*.hot-update.*
+**/index.html

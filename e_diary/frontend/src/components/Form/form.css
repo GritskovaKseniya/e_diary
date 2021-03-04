@@ -1,0 +1,10 @@
+.auth-form-body {
+    padding: 20px;
+    font-size: 14px;
+    border-radius: 6px 6px 6px 6px;
+    text-align: left;
+}
+
+.w-30{
+    width: 30%
+}
