@@ -83,7 +83,7 @@ def authorization(request):
         if user is not None:
             login(request, user)
             if len(Teachers.objects.filter(user=user)) != 0:
-                return redirect('/teacher')
+                return redirect('/students')
             elif len(Students.objects.filter(user=user)) != 0:
                 return redirect('/')
             elif len(Parents.objects.filter(user=user)) != 0:

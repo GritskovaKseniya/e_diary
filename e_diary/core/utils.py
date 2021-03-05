@@ -1,7 +1,7 @@
 import datetime as dt
+from core.models import *
 from datetime import datetime, date, time
 import calendar
-from core.models import *
 
 
 def get_progress_table(user, user_class):
@@ -81,7 +81,7 @@ def get_grades_for_week(lessons, week, user):
 
 
 def get_date_to_string(date):
-    week_days = ['понедельник', 'вторник', 'среду', 'четверг', 'пятница', 'субботу', 'воскресенье']
+    week_days = ['понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу', 'воскресенье']
     return week_days[date.weekday()] + ' ' + date.strftime('%d.%m.%Y')
 
 

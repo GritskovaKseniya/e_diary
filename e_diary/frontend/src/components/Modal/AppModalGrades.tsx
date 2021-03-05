@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
-import './modal.css';
+import { Button, Form, FormControl, Modal } from "react-bootstrap";
+import './AppModal.css'; 
 
-export function ModalForm() {
+export function AppModalGrades(props: any) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -15,14 +15,14 @@ export function ModalForm() {
       </button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Домашнее задание</Modal.Title>
+          <Modal.Title>Оценки</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          Русский язык 18.02.2021
-          <InputGroup>
+          Русский язык 18.02.2021 {props.bodyText}
+          <Form>
             <FormControl as="textarea" aria-label="With textarea" />
-          </InputGroup>
+          </Form>
         </Modal.Body>
 
         <Modal.Footer>

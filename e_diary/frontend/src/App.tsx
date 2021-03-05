@@ -1,14 +1,17 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Routers from './routers/routers';
-import { getWeekTimetable } from './api';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Header } from './components/Header/Header';
+import AppRouters from './Routers/AppRouters';
 
 function App() {
-  React.useEffect(() => {getWeekTimetable(14)}, [])
   return (
     <div className="App">
-      <Routers/>
+      <Router>
+        <Header/>
+        <AppRouters/>
+      </Router>
     </div>
   );
 }

@@ -1,46 +1,38 @@
-import React from "react";
-import { Container, Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container } from "react-bootstrap";
+import { getWeekTimetable } from "../api";
+import { Schedule } from "../Schedule/Schedule";
+import { AppAlert } from "./AppAlert";
 
 export function Timetable() {
+  const [data, setData] = useState<any>(null)
+
+  useEffect(() => {
+    getWeekTimetable()
+      .then((data) => setData(data))
+  }, [])
+
+  console.log(data?.schedule)
+
+  function getDayContent(day: string, lessons: any[]) {
+    return(
+      <>
+        <h4>Расписание на {day}</h4>
+        <Schedule data={lessons} onScheduleChange={() => {
+          getWeekTimetable()
+            .then((data) => setData(data))
+        }} />
+      </>
+    )
+  }
+
   return (
-    <>
-    <Container>
-      <h5>Titetable</h5> 
-        <Table bordered hover> 
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Предмет</th>
-                    <th>Класс</th>
-                    <th>Домашнее задание</th>
-                    <th>Комментарий преподавателя</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Русский язык</td>
-                    <td>5 класс</td>
-                    <td>упр.193, синтаксический разбор предложений, стр.82 учить правило</td>
-                    <td>принести двойной листик в линию</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td></td>
-                    <td>Larry the Bird</td>
-                    <td>@fat</td>
-                    <td>@fat</td>
-                </tr>
-            </tbody>
-        </Table>
+    <Container fluid>
+      <AppAlert
+        alertType={"info"}
+        buttonType={"light"}
+        text={"Чтобы заполнить домашнее задание или комментарий, кликните по полю, которое хотите заполнить." }/>
+      {data?.schedule.map((day: any) => getDayContent(day.date, day.lessons))} 
     </Container>
-    </>
 );
 }

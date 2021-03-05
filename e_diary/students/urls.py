@@ -6,6 +6,6 @@ from . import views
 
 app_name = 'students'
 urlpatterns = [
-    path('', views.main, name='main'),
-    re_path(r'^static/(?P<path>.*)$', serve)
+    re_path(r'^static/(?P<path>.*)$', serve),
+    re_path(r'^.*$', views.main, name='main')
 ]

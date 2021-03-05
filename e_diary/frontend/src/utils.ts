@@ -1,3 +1,4 @@
+
 export const formatDate = (date: Date): string => {
     let day: string = date.getDate() < 10 ?
         "0" + date.getDate().toString()
