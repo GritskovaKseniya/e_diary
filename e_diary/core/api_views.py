@@ -81,6 +81,7 @@ def lessons_and_classes_list_get(request):
     response = JsonResponse({'list': lessons}, safe=False, json_dumps_params={'ensure_ascii': False})
     return response
 
+
 def students_class_list(request):
     teacher = Teachers.objects.filter(user=User.objects.filter(id=int(request.user.id))[0])[0]
     classes_number = []
@@ -94,10 +95,10 @@ def students_class_list(request):
         students = list(Students.objects.all().filter(user_class=class_number))
         for student in students:
             students_list.append(student.name)
-        classes_list.append({'classList': list(students_list)})
+        classes_list.append({'classMembers': list(students_list)})
     print(list(classes_list))
 
-    response = JsonResponse({'ClassesList': list(classes_list)}, safe=False, json_dumps_params={'ensure_ascii': False})
+    response = JsonResponse({'classesList': list(classes_list)}, safe=False, json_dumps_params={'ensure_ascii': False})
     return response
 
 
