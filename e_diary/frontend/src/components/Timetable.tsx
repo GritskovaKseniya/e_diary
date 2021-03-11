@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { getWeekTimetable } from "../api";
-import { Schedule } from "../Schedule/Schedule";
+import { Schedule } from "./Schedule/Schedule";
 import { AppAlert } from "./AppAlert";
 
 export function Timetable() {

@@ -1,5 +1,5 @@
 import { Button, Container } from "react-bootstrap";
-import { Schedule } from "../Schedule/Schedule";
+import { Schedule } from "./Schedule/Schedule";
 import { AppAlert } from "./AppAlert"
 import React, { useEffect, useState } from "react";
 import { getDayTimetable, loadSchedule } from '../api';

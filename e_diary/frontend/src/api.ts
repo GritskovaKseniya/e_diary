@@ -27,6 +27,19 @@ export async function updateHomework(lessonId: number, homework: string) {
         .then(resp => resp.json());
 }
 
+export async function getGradeList(lesson: string) {
+    return fetch(`${BASE_API_URL}/grade_list/get`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify({lesson}),
+        credentials: 'same-origin'
+    })
+        .then(resp => resp.json());
+        
+}
+
 export async function updateComment(lessonId: number, comment: string) {
     return fetch(`${BASE_API_URL}/comment/update`, {
         method: 'POST',

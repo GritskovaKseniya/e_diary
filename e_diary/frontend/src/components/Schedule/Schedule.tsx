@@ -1,9 +1,9 @@
 import moment from "moment";
 import './Schedule.css'
 import { Table } from "react-bootstrap";
-import { updateComment, updateHomework } from "../api";
-import { AppModalComment } from "../components/Modal/AppModalComment";
-import { AppModalHomework } from "../components/Modal/AppModalHomework";
+import { updateComment, updateHomework } from "../../api";
+import { AppModalComment } from "../Modal/AppModalComment";
+import { AppModalHomework } from "../Modal/AppModalHomework";
 
 export function Schedule(props: any) {
 

@@ -82,6 +82,46 @@ def lessons_and_classes_list_get(request):
     return response
 
 
+@csrf_exempt
+def grade_list(request):
+    request_json = json.loads(request.body)  # переводит параметры POST запроса в json
+    user = User.objects.filter(id=int(request.user.id))[0]
+    teacher = Teachers.objects.filter(user=user.id)[0]
+    all_grades = []
+    select_lesson = ""
+    select_class = 0
+    array = OneLesson.objects.all().filter(teacher=teacher)
+    for item in array:
+        lessons = str(item.a_class.number) + ' класс ' + str(item.lesson.name)
+        # проверили совпадает ли выбранный урок с уроком в массиве
+        if str(request_json.get('lesson')) == lessons:
+            select_lesson = item.lesson
+            select_class = item.a_class
+
+    # получаю список класса по предмету
+    students = Students.objects.all().filter(user_class=select_class).order_by('name')
+    # print(students)
+    # получаю все уроки этого учителя и этого класса
+    selected_lessons = OneLesson.objects.all().filter(teacher=teacher).filter(lesson=select_lesson).order_by('date')
+    lessons_date = []
+    for student in students:
+        tmp = []
+        for lesson in selected_lessons:
+            student_grade_list = Grade.objects.all().filter(lesson=lesson).filter(student=student)
+            # print(student_grade_list)
+            lessons_date.append(lesson.date)
+
+            for grade in student_grade_list:
+                tmp.append({'date': lesson.date, 'grade': grade.grade, 'type': norm_view_for(grade.grade_type)})
+                # print("TMP", tmp)
+        all_grades.append({'student': student.name, 'grades': tmp})
+    print("ALL GRADES: ", all_grades)
+    print("ALL DATES: ", sorted(list(set(lessons_date))))
+    response = JsonResponse({"data": [{"gradeLists": all_grades}, {"lessonsDate": sorted(list(set(lessons_date)))}]},
+                            safe=False, json_dumps_params={'ensure_ascii': False})
+    return response
+
+
 def students_class_list(request):
     teacher = Teachers.objects.filter(user=User.objects.filter(id=int(request.user.id))[0])[0]
     classes_number = []

@@ -25,7 +25,7 @@ export function Header(){
             <Nav.Link><Link to="/students/timetable">Расписание</Link></Nav.Link>
             <Nav.Link><Link to="/students/progress_table">Журнал</Link></Nav.Link>
             {/* из-за проблем с переходом из реакта нужно делать onClick */}
-            <Nav.Link><a href='/logout' onClick={() => {window.location = `${window.location.origin}/logout`}}>Выход</a></Nav.Link>
+            <Nav.Link><a href='/logout' onClick={() => {window.location.href = `${window.location.origin}/logout`}}>Выход</a></Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -87,3 +87,5 @@ def get_date_to_string(date):
 
 def first_and_last_weekday_string(week):
     return week[0].strftime('%d.%m.%Y')+'-'+week[-1].strftime('%d.%m.%Y')
+
+# def get_quarter():

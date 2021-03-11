@@ -11,5 +11,6 @@ urlpatterns = [
     path('schedule/day', api_views.timetable_day_get),
     path('schedule/load', api_views.load_timetable),
     path('lessonsandclasses/list/get', api_views.lessons_and_classes_list_get),
-    path('students/listname/get', api_views.students_class_list)
+    path('students/listname/get', api_views.students_class_list),
+    path('grade_list/get', api_views.grade_list)
 ]

@@ -1,6 +1,6 @@
-import { ProgressTable } from "../components/ProgressTable";
-import { Timetable } from "../components/Timetable";
-import { MainPage } from "../components/MainPage";
+import { ProgressTable } from "../ProgressTable";
+import { Timetable } from "../Timetable";
+import { MainPage } from "../MainPage";
 import './Routers.css';
 import React from "react";
 import { Route, Switch } from "react-router-dom";

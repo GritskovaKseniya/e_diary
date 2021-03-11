@@ -1,39 +1,58 @@
-import { useState, useEffect } from "react";
-import { Container, Form, Button } from "react-bootstrap";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
-import { lessonsAndClassesListGet, studentsListNameGet } from "../api";
+import { useState, useEffect } from "react"
+import { Container, Form } from "react-bootstrap"
+import { lessonsAndClassesListGet, getGradeList } from "../api"
+import { GradeTable } from "./GradeTable/GradeTable"
 
 export function ProgressTable() {
   const [lessonsList, setLessonsList] = useState<any>('')
-  const [studentsList, setStudentsList] = useState<any>(null)
-
+  const [selected, setSelected] = useState<string | null>(null)
+  const [gradeList, setGradeList] = useState<any>(null)
+ 
   useEffect(() => {
     lessonsAndClassesListGet()
-      .then((lessonList) => setLessonsList(lessonList))
+      .then((lessonsList) => {
+        setLessonsList(lessonsList)
+        setSelected(lessonsList.list[0])
+      })
   }, [])
 
   useEffect(() => {
-    studentsListNameGet()
-      .then((studentsList) => setStudentsList(studentsList))
-  }, [])
+    if (selected) {
+      getGradeList(selected)
+        .then((gradeList) => {
+          setGradeList(gradeList)
+          console.log(gradeList)
+        })
+    }
+  }, [selected])
 
-  console.log(studentsList)
+  // DEBUG
+  if (gradeList) {
+    console.log(gradeList.data[0])
+    console.log(gradeList.data[1])
+  }
+
+  function handleChange(e: any){
+    setSelected(e.target.value)
+    console.log(e)
+  }
 
   return( 
     <Container fluid>
       <h2>Журнал</h2>
       <Form>
         <Form.Label>Выберите класс и предмет</Form.Label>
-        <Form.Control as="select">
-          {lessonsList.list && lessonsList.list.map((lesson: string) => {
-            return <option>{lesson}</option>;
-          })}
-        </Form.Control>
+        {selected && 
+          <Form.Control as="select" 
+            onChange={handleChange}
+            value = {selected}
+          >
+            {lessonsList.list && lessonsList.list.map((lesson: string) => {
+              return <option value={lesson}>{lesson}</option>
+            })}
+          </Form.Control>
+        }
       </Form>
-      {/* {studentsList.ClassesList && studentsList.ClassesList.map((student: string) => {
-        return <p>{student}</p>;
-      })} */}
-      <Button variant="success" className="mt-3" onClick={() => studentsListNameGet()
-          .then((studentsList) => setStudentsList(studentsList))}>Загрузить список учеников</Button>
+      {gradeList && <GradeTable date={gradeList.data[0]} list={gradeList.data[1]}/>}
     </Container>)
 }

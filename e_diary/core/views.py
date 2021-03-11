@@ -1,12 +1,23 @@
 import datetime
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 
 from core.utils import *
 
 
+def group_required(*group_names):
+    """Requires user membership in at least one of the groups passed in."""
+
+    def in_groups(u):
+        if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:
+            return True
+
+    return user_passes_test(in_groups)
+
+
 @login_required
+@group_required('admin', 'student')
 def main(request):
     url_name = request.resolver_match.url_name
     user = request.user
@@ -19,6 +30,7 @@ def main(request):
 
 
 @login_required
+@group_required('admin', 'student')
 def homework(request):
     url_name = request.resolver_match.url_name
     user = request.user
@@ -34,6 +46,7 @@ def homework(request):
 
 
 @login_required
+@group_required('admin', 'student')
 def timetable(request):
     url_name = request.resolver_match.url_name
     user = request.user
@@ -46,6 +59,7 @@ def timetable(request):
 
 
 @login_required
+@group_required('admin', 'student')
 def progress_table(request):
     url_name = request.resolver_match.url_name
     user = request.user
@@ -57,6 +71,7 @@ def progress_table(request):
 
 
 @login_required
+@group_required('admin', 'student')
 def grade(request):
     url_name = request.resolver_match.url_name
     user = request.user
