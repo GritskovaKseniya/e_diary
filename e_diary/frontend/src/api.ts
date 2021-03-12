@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 const BASE_API_URL  = 'http://127.0.0.1:8000/api'
 
 export async function loadSchedule() {
@@ -57,13 +59,13 @@ export async function getUsername() {
         .then(resp => resp.json());
 }
 
-export async function getWeekTimetable() {
-    return fetch(`${BASE_API_URL}/schedule/week`, {credentials: 'same-origin'})
+export async function getWeekTimetable(date: Moment) {
+    return fetch(`${BASE_API_URL}/schedule/week?date=${date.format("YYYY-MM-DD")}`, {credentials: 'same-origin'})
         .then(resp => resp.json());
 }
 
-export async function getDayTimetable() {
-    return fetch(`${BASE_API_URL}/schedule/day`, {credentials: 'same-origin'})
+export async function getDayTimetable(date: Moment) {
+    return fetch(`${BASE_API_URL}/schedule/day?date=${date.format("YYYY-MM-DD")}`, {credentials: 'same-origin'})
         .then(resp => resp.json());
 }
 

@@ -34,11 +34,16 @@ export function GradeTable(props: any) {
   return (
       <Table bordered hover className="mt-20">
         <thead>
+        <tr>
+            <th colSpan={2}>Тип оценки</th>
+            <th>Самостоятелньая работа</th><th>Работа на уроке</th><th></th><th></th><th>Контрольная работа</th><th></th>
+          </tr>
           <tr>
             <th className="width-number">#</th>
             <th className="width-lesson">ФИО</th>
             {props.list.lessonsDate.map((lessonDate: string) => (<th>{lessonDate}</th>))}
           </tr>
+          
         </thead>
         <tbody>
           {props.date.gradeLists.map((student: any, idx: number) => (getScheduleRow(student, idx)))}

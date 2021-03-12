@@ -48,17 +48,17 @@ def username_get(request):
 
 
 def timetable_week_get(request):
-    today = date.today()
+    request_date = request.GET.get('date')
     user = User.objects.filter(id=int(request.user.id))[0]
-    timetable = get_timetable_week(today, user.id)
+    timetable = get_timetable_week(datetime.strptime(request_date, '%Y-%m-%d'), user.id)
     response = JsonResponse({'schedule': timetable}, safe=False, json_dumps_params={'ensure_ascii': False})
     return response
 
 
 def timetable_day_get(request):
-    today = date.today()
+    request_date = request.GET.get('date')
     user = User.objects.filter(id=int(request.user.id))[0]
-    timetable = get_timetable(today, user.id)
+    timetable = get_timetable(datetime.strptime(request_date, '%Y-%m-%d'), user.id)
     response = JsonResponse({'schedule': timetable}, safe=False, json_dumps_params={'ensure_ascii': False})
     return response
 
@@ -104,6 +104,7 @@ def grade_list(request):
     # получаю все уроки этого учителя и этого класса
     selected_lessons = OneLesson.objects.all().filter(teacher=teacher).filter(lesson=select_lesson).order_by('date')
     lessons_date = []
+    lessons_date_test = []
     for student in students:
         tmp = []
         for lesson in selected_lessons:
@@ -113,10 +114,12 @@ def grade_list(request):
 
             for grade in student_grade_list:
                 tmp.append({'date': lesson.date, 'grade': grade.grade, 'type': norm_view_for(grade.grade_type)})
+                lessons_date_test.append({"date": lesson.date, "type": norm_view_for(grade.grade_type)})
                 # print("TMP", tmp)
         all_grades.append({'student': student.name, 'grades': tmp})
     print("ALL GRADES: ", all_grades)
     print("ALL DATES: ", sorted(list(set(lessons_date))))
+    print("ALL DATES TEST: ", lessons_date_test)
     response = JsonResponse({"data": [{"gradeLists": all_grades}, {"lessonsDate": sorted(list(set(lessons_date)))}]},
                             safe=False, json_dumps_params={'ensure_ascii': False})
     return response

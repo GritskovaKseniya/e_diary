@@ -1,9 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Jumbotron, Nav, Navbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { getUsername } from '../../api'
 import { LocalTime } from '../LocalTime'
+import { AppModalInfo } from '../Modal/AppModalInfo'
 import './Header.css'
 
 export function Header(){
@@ -27,6 +28,8 @@ export function Header(){
             {/* из-за проблем с переходом из реакта нужно делать onClick */}
             <Nav.Link><a href='/logout' onClick={() => {window.location.href = `${window.location.origin}/logout`}}>Выход</a></Nav.Link>
           </Nav>
+          <AppModalInfo className="mr-sm-2"
+          text={"Чтобы заполнить домашнее задание или поставить оценки, кликните по нужному полю." }/>
         </Navbar.Collapse>
       </Navbar>
 

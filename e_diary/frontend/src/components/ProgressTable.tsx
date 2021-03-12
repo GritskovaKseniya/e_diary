@@ -40,6 +40,7 @@ export function ProgressTable() {
   return( 
     <Container fluid>
       <h2>Журнал</h2>
+      <h3>Текущая четверть.</h3>
       <Form>
         <Form.Label>Выберите класс и предмет</Form.Label>
         {selected && 
