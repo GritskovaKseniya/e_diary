@@ -50,10 +50,6 @@ export function Timetable() {
           </Button>
           </Col>
         </Row>
-      {/* <AppAlert
-        alertType={"info"}
-        buttonType={"light"}
-        text={"Чтобы заполнить домашнее задание или комментарий, кликните по полю, которое хотите заполнить." }/> */}
       {data?.schedule.map((day: any) => getDayContent(day.date, day.lessons))} 
     </Container>
 );

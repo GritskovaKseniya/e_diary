@@ -1,7 +1,7 @@
 import { Button, Col, Container, Row } from "react-bootstrap"
 import { Schedule } from "../Schedule/Schedule"
-import { AppAlert } from "../AppAlert"
-import React, { useEffect, useState } from "react"
+import { AppAlert } from "../AppAlert/AppAlert"
+import { useEffect, useState } from "react"
 import { getDayTimetable, loadSchedule } from '../../api'
 import moment, { Moment } from "moment"
 import './MainPage.css'
@@ -21,6 +21,9 @@ export function MainPage() {
   return (
     <>
       <Container fluid>
+        <AppAlert alertType={"info"} buttonType={"light"}
+            text={"Чтобы заполнить домашнее задание, кликните по полю, которое хотите заполнить." }/>
+        
         <Row className="center m-2">
           <Col>
             <Button variant="btn-outline-secondary"
@@ -41,8 +44,6 @@ export function MainPage() {
         {data && <Schedule data={data.schedule} onScheduleChange={() => {
           getDayTimetable(date).then((data) => setData(data)) }}/>
         }
-        <AppAlert alertType={"info"} buttonType={"light"}
-          text={"Чтобы заполнить домашнее задание, кликните по полю, которое хотите заполнить." }/>
       </Container>
       <Button variant="success" className="mt-3" onClick={() => loadSchedule()}>Загрузить расписание</Button>
     </>
