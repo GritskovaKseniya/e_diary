@@ -54,13 +54,13 @@ export function ProgressTable() {
               value = {selected}
             >
               {lessonsList.list && lessonsList.list.map((lesson: string) => {
-                return <option value={lesson}>{lesson}</option>
+                return <option>{lesson}</option>
               })}
             </Form.Control>
           }
           </Col>
         </Form.Group>
       </Form>
-      {gradeList && <GradeTable date={gradeList.data[0]} list={gradeList.data[1]}/>}
+      {gradeList && <GradeTable date={gradeList.data[0]} list={gradeList.data[1]} lesson={selected}/>}
     </Container>)
 }

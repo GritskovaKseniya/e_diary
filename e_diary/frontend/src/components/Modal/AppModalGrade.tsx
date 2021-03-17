@@ -3,6 +3,7 @@ import { Button, Row, Col, Modal, Container, Form } from "react-bootstrap";
 import './AppModal.css'; 
 import pencil from '../../pencil.svg'
 import { getGradesValue } from "../../api";
+import moment from "moment";
 
 export function AppModalGrade(props: any) {
   const [show, setShow] = useState(false)
@@ -23,7 +24,18 @@ export function AppModalGrade(props: any) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    props.onSubmit()
+    props.onSubmit(
+      {
+        date: props.date, 
+        grades: [
+          {grade: valueHW, type: "Домашняя работа"}, 
+          {grade: valueLW, type: "Работа на уроке"}, 
+          {grade: valueT, type: "Самостоятельная работа"}, 
+          {grade: valueCT, type: "Контрольная работа"}
+        ],
+        student: props.name,
+        lesson : props.lesson
+      })
     setShow(false)
   }
 
@@ -90,7 +102,7 @@ export function AppModalGrade(props: any) {
       </button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Оценки на {props.date}</Modal.Title>
+          <Modal.Title><h5>Оценки на {moment(props.date).format("DD.MM.YYYY")}</h5></Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
