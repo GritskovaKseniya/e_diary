@@ -12,11 +12,6 @@ export async function lessonsAndClassesListGet() {
         .then(resp => resp.json());
 }
 
-export async function studentsListNameGet() {
-    return fetch(`${BASE_API_URL}/students/listname/get`, {credentials: 'same-origin'})
-        .then(resp => resp.json());
-}
-
 export async function updateHomework(lessonId: number, homework: string) {
     return fetch(`${BASE_API_URL}/homework/update`, {
         method: 'POST',
@@ -69,8 +64,8 @@ export async function getDayTimetable(date: Moment) {
         .then(resp => resp.json());
 }
 
-export async function getGrades() {
-    return fetch(`${BASE_API_URL}/grade/get`)
+export async function getGradesValue() {
+    return fetch(`${BASE_API_URL}/grade/value`, {credentials: 'same-origin'})
         .then(resp => resp.json());
 }
 

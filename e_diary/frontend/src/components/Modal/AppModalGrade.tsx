@@ -1,29 +1,78 @@
-import { useState } from "react";
-import { Button, Row, Col, FormControl, Modal, Container } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Row, Col, Modal, Container, Form } from "react-bootstrap";
 import './AppModal.css'; 
 import pencil from '../../pencil.svg'
+import { getGradesValue } from "../../api";
 
 export function AppModalGrade(props: any) {
   const [show, setShow] = useState(false)
-  const initialComment = props.comment
-  const [comment, setComment] = useState(initialComment)
+  const [value, setValue] = useState<any>(null)
+  
+  let valueHW = 0; let valueLW = 0; let valueT = 0; let valueCT = 0;
 
   const handleClose = () => {
-    reset()
     setShow(false)
   }
 
-  const reset = () => {
-    setComment(initialComment)
-  }
+  useEffect(() => {
+    getGradesValue()
+      .then((value: any) => {
+        setValue(value)
+      })
+  }, [])
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    props.onSubmit({comment})
+    props.onSubmit()
     setShow(false)
   }
 
   const handleShow = () => setShow(true);
+
+  function grades(lessonDate: string) {
+    if(props.grades !== " ") {
+      const gradesJSX = props.grades.map((grade: any) => {
+        switch (grade.type) {
+          case "Работа на уроке":
+            valueLW = grade.grade
+            return (
+              <span className="grade-cw"> 
+                {grade.grade}&nbsp; 
+              </span>
+            )
+            break;
+
+          case "Самостоятельная работа":
+            valueT = grade.grade
+            return (
+              <span className="grade-t"> 
+                {grade.grade}&nbsp; 
+              </span>
+            )
+            break;
+      
+          case "Контрольная работа":
+            valueCT = grade.grade
+            return (
+              <span className="grade-ct"> 
+                {grade.grade}&nbsp;
+              </span>
+            )
+            break;
+
+          case "Домашняя работа":
+            valueHW = grade.grade
+            return (
+              <span className="grade-hw"> 
+                {grade.grade}&nbsp;
+              </span>
+            )
+            break;
+        }
+      })
+      return (<span>{gradesJSX}</span>)
+    } else {return(<span>{props.grades}</span>)}
+  }
 
   return (
     <>
@@ -31,7 +80,7 @@ export function AppModalGrade(props: any) {
         <Container>
           <Row>
             <Col>
-              {initialComment}
+              {grades(props.date)}
             </Col>
             <Col xs={6} md={3}>
               <img src={pencil} alt="pencil" />
@@ -41,16 +90,42 @@ export function AppModalGrade(props: any) {
       </button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Комментарий</Modal.Title>
+          <Modal.Title>Оценки на {props.date}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <h6>{props.lesson} {props.date}</h6>
-          <FormControl as="textarea" 
-            rows={5}
-            aria-label="With textarea" 
-            value={comment} 
-            onChange={(e: any) => setComment(e.target.value)}/>
+          <p><h6>{props.name}</h6></p>
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label><span className="grade-hw">Оценка за домашнее задание:</span></Form.Label>
+            <Form.Control as="select" value={valueHW}>
+              <option value={0} disabled>Выберите оценку</option>
+              {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label><span className="grade-cw">Оценка за работу на уроке:</span></Form.Label>
+            <Form.Control as="select" value={valueLW}>
+              <option value={0} disabled>Выберите оценку</option>
+              {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label><span className="grade-t">Оценка за самостоятельную работу:</span></Form.Label>
+            <Form.Control as="select" value={valueT}>
+              <option value={0} disabled>Выберите оценку</option>
+              {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label><span className="grade-ct">Оценка за контрольную работу:</span></Form.Label>
+            <Form.Control as="select" value={valueCT}>
+              <option value={0} disabled>Выберите оценку</option>
+              {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
+            </Form.Control>
+          </Form.Group>        
         </Modal.Body>
 
         <Modal.Footer>
@@ -62,7 +137,6 @@ export function AppModalGrade(props: any) {
           </Button>
         </Modal.Footer>
       </Modal>
-
     </>
   );
 }

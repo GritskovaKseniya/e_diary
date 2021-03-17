@@ -29,6 +29,11 @@ export function Timetable() {
     )
   }
 
+  function period(day: Moment){
+    const period = moment(day).subtract(day.isoWeekday() - 1, 'days').format("DD.MM.YYYY")+" - "+moment(day).subtract(day.isoWeekday() - 1, 'days').add(6, 'days').format("DD.MM.YYYY")
+    return period
+  }
+
   return (
     <Container fluid>
       <Row className="center m-2">
@@ -40,7 +45,7 @@ export function Timetable() {
           </Button>
           </Col>
           <Col>
-            <h4>{date.isSame(moment(), 'day') ? `Расписание на текущую неделю.` : ` ` } </h4>
+            <h4>{period(date)}</h4>
           </Col>
           <Col>
           <Button variant="btn-outline-secondary"

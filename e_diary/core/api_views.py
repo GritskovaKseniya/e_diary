@@ -28,11 +28,6 @@ def comment_update(request):
 
 
 # todo: this function
-def grades_get(request):
-    pass
-
-
-# todo: this function
 @csrf_exempt
 def grades_update(request):
     request_json = json.loads(request.body)
@@ -117,9 +112,9 @@ def grade_list(request):
                 lessons_date_test.append({"date": lesson.date, "type": norm_view_for(grade.grade_type)})
                 # print("TMP", tmp)
         all_grades.append({'student': student.name, 'grades': tmp})
-    print("ALL GRADES: ", all_grades)
-    print("ALL DATES: ", sorted(list(set(lessons_date))))
-    print("ALL DATES TEST: ", lessons_date_test)
+    # print("ALL GRADES: ", all_grades)
+    # print("ALL DATES: ", sorted(list(set(lessons_date))))
+    # print("ALL DATES TEST: ", lessons_date_test)
     response = JsonResponse({"data": [{"gradeLists": all_grades}, {"lessonsDate": sorted(list(set(lessons_date)))}]},
                             safe=False, json_dumps_params={'ensure_ascii': False})
     return response
@@ -144,5 +139,13 @@ def students_class_list(request):
     response = JsonResponse({'classesList': list(classes_list)}, safe=False, json_dumps_params={'ensure_ascii': False})
     return response
 
+
+def grades_value(request):
+    user = User.objects.filter(id=int(request.user.id))[0]
+    value = []
+    for val in GradeList.choices:
+        value.append(val[0])
+    response = JsonResponse({'gradesValue': value}, safe=False, json_dumps_params={'ensure_ascii': False})
+    return response
 
 
