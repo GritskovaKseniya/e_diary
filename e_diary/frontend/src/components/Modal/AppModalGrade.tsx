@@ -8,8 +8,12 @@ import moment from "moment";
 export function AppModalGrade(props: any) {
   const [show, setShow] = useState(false)
   const [value, setValue] = useState<any>(null)
-  
-  let valueHW = 0; let valueLW = 0; let valueT = 0; let valueCT = 0;
+  const [selectValues, setSelectValues] = useState<any>({
+    valueHW: props.grades.find((grade: any) => grade.type === "Домашняя работа")?.grade || 0, 
+    valueLW: props.grades.find((grade: any) => grade.type === "Работа на уроке")?.grade || 0,
+    valueT: props.grades.find((grade: any) => grade.type === "Самостоятельная работа")?.grade || 0, 
+    valueCT: props.grades.find((grade: any) => grade.type === "Контрольная работа")?.grade || 0 
+  })
 
   const handleClose = () => {
     setShow(false)
@@ -28,10 +32,10 @@ export function AppModalGrade(props: any) {
       {
         date: props.date, 
         grades: [
-          {grade: valueHW, type: "Домашняя работа"}, 
-          {grade: valueLW, type: "Работа на уроке"}, 
-          {grade: valueT, type: "Самостоятельная работа"}, 
-          {grade: valueCT, type: "Контрольная работа"}
+          {grade: selectValues.valueHW, type: "Домашняя работа"}, 
+          {grade: selectValues.valueLW, type: "Работа на уроке"}, 
+          {grade: selectValues.valueT, type: "Самостоятельная работа"}, 
+          {grade: selectValues.valueCT, type: "Контрольная работа"}
         ],
         student: props.name,
         lesson : props.lesson
@@ -42,44 +46,53 @@ export function AppModalGrade(props: any) {
   const handleShow = () => setShow(true);
 
   function grades(lessonDate: string) {
-    if(props.grades !== " ") {
+    if(props.grades.length) {
       const gradesJSX = props.grades.map((grade: any) => {
+        let classNameCss = ""; let theGrade = 0; let theNull = 0;
         switch (grade.type) {
           case "Работа на уроке":
-            valueLW = grade.grade
-            return (
-              <span className="grade-cw"> 
-                {grade.grade}&nbsp; 
-              </span>
-            )
+            if (grade.grade === selectValues.valueLW){
+              theGrade = selectValues.valueLW
+            }
+            classNameCss = "grade-cw"
             break;
-
+            
           case "Самостоятельная работа":
-            valueT = grade.grade
-            return (
-              <span className="grade-t"> 
-                {grade.grade}&nbsp; 
-              </span>
-            )
+            if (grade.grade === selectValues.valueT){
+              theGrade = selectValues.valueT
+            } else {
+              setSelectValues({...selectValues, valueT:grade.grade})
+              theGrade = selectValues.valueT
+            }
+            classNameCss = "grade-t"
             break;
-      
+            
           case "Контрольная работа":
-            valueCT = grade.grade
-            return (
-              <span className="grade-ct"> 
-                {grade.grade}&nbsp;
-              </span>
-            )
+            if (grade.grade === selectValues.valueCT){
+              theGrade = selectValues.valueCT
+            } else {
+              setSelectValues({...selectValues, valueCT:grade.grade})
+              theGrade = selectValues.valueCT
+            }
+            classNameCss = "grade-ct"
             break;
-
+            
           case "Домашняя работа":
-            valueHW = grade.grade
-            return (
-              <span className="grade-hw"> 
-                {grade.grade}&nbsp;
-              </span>
-            )
-            break;
+            if (grade.grade === selectValues.valueHW){
+              theGrade = selectValues.valueHW
+            } else {
+              setSelectValues({...selectValues, valueHW:grade.grade})
+              theGrade = selectValues.valueHW
+            }
+            classNameCss = "grade-hw"
+            break; 
+        }
+        if (theGrade !== theNull) {
+          return (
+            <span className={classNameCss}> 
+              {theGrade}&nbsp; 
+            </span>
+          )
         }
       })
       return (<span>{gradesJSX}</span>)
@@ -88,7 +101,7 @@ export function AppModalGrade(props: any) {
 
   return (
     <>
-      <button className="modal_button"onClick={handleShow}>
+      <button className="modal_button" onClick={handleShow}>
         <Container>
           <Row>
             <Col>
@@ -107,33 +120,37 @@ export function AppModalGrade(props: any) {
 
         <Modal.Body>
           <p><h6>{props.name}</h6></p>
-          <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Group>
             <Form.Label><span className="grade-hw">Оценка за домашнее задание:</span></Form.Label>
-            <Form.Control as="select" value={valueHW}>
+            <Form.Control as="select" value={selectValues.valueHW} 
+              onChange={(e: any) => {setSelectValues({...selectValues, valueHW:e.target.value})}}>
               <option value={0} disabled>Выберите оценку</option>
               {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Group>
             <Form.Label><span className="grade-cw">Оценка за работу на уроке:</span></Form.Label>
-            <Form.Control as="select" value={valueLW}>
+            <Form.Control as="select" value={selectValues.valueLW}
+              onChange={(e: any) => {setSelectValues({...selectValues, valueLW:e.target.value})}}>
               <option value={0} disabled>Выберите оценку</option>
               {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Group>
             <Form.Label><span className="grade-t">Оценка за самостоятельную работу:</span></Form.Label>
-            <Form.Control as="select" value={valueT}>
+            <Form.Control as="select" value={selectValues.valueT}
+              onChange={(e: any) => {setSelectValues({...selectValues, valueT:e.target.value})}}>
               <option value={0} disabled>Выберите оценку</option>
               {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="exampleForm.ControlSelect1">
+          <Form.Group>
             <Form.Label><span className="grade-ct">Оценка за контрольную работу:</span></Form.Label>
-            <Form.Control as="select" value={valueCT}>
+            <Form.Control as="select" value={selectValues.valueCT}
+              onChange={(e: any) => {setSelectValues({...selectValues, valueCT:e.target.value})}}>
               <option value={0} disabled>Выберите оценку</option>
               {value && value.gradesValue.map((value: number) => (<option>{value}</option>))}
             </Form.Control>

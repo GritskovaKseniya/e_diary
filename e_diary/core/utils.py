@@ -66,17 +66,43 @@ def get_grades_for_week(lessons, week, user):
     result = []
     for lesson in lessons:
         day_array = []
-        for day in week[:-1]: # итерации с пн по сб
+        # итерации с пн по пт
+        for day in week:
             lesson_t = OneLesson.objects.filter(lesson__name=lesson['lesson__name']).filter(date=day)
             grade_array = []
             for les in lesson_t:
-                grades = Grade.objects.filter(student=user).filter(lesson=les)
+                grades = Grade.objects.filter(student=Students.objects.filter(user=user)[0]).filter(lesson=les)
                 for grade in grades:
                     # print('grade', grade)
                     # print('lesson', lesson)
                     grade_array.append({'type': grade.grade_type, 'value': grade.grade})
             day_array.append({'date': day, 'grades': grade_array})
-        result.append({'lesson': lesson['lesson__name'], 'days_and_grades': day_array })
+        result.append({'lesson': lesson['lesson__name'], 'days_and_grades': day_array})
+    return result
+
+
+def get_grades_for_quarter(lessons, quarter, user):
+    result = []
+    for lesson in lessons:
+        day_array = []
+        amount = 0.0
+        number = 1
+        # итерации с пн по пт
+        for day in quarter:
+            lesson_t = OneLesson.objects.filter(lesson__name=lesson['lesson__name']).filter(date=day)
+            grade_array = []
+            for les in lesson_t:
+                grades = Grade.objects.filter(student=Students.objects.filter(user=user)[0]).filter(lesson=les)
+                for grade in grades:
+                    grade_array.append({'type': grade.grade_type, 'value': grade.grade})
+                    amount = amount + float(grade.grade)
+                    number = number + 1
+            day_array.append({'date': day, 'grades': grade_array})
+            # print(amount, number)
+            GPA = 0
+            if number != 1:
+                GPA = amount / (number - 1)
+        result.append({'lesson': lesson['lesson__name'], 'days_and_grades': day_array, 'GPA': GPA})
     return result
 
 
@@ -86,6 +112,6 @@ def get_date_to_string(date):
 
 
 def first_and_last_weekday_string(week):
-    return week[0].strftime('%d.%m.%Y')+'-'+week[-1].strftime('%d.%m.%Y')
+    return week[0].strftime('%d.%m.%Y') + '-' + week[-1].strftime('%d.%m.%Y')
 
 # def get_quarter():

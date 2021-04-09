@@ -1,15 +1,19 @@
 .grade-hw{
     color: #1578F0;
+    font-weight: 600;
 }
 
 .grade-ct{
     color: #FF1913;
+    font-weight: 600;
 }
 
 .grade-t{
     color: #FFA400;
+    font-weight: 600;
 }
 
 .grade-cw{
     color: #2DB902;
+    font-weight: 600;
 }

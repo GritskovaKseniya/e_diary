@@ -127,6 +127,19 @@ def norm_view_for(grade_type):
         return ' Ошибка '
 
 
+def from_str_to_choise(str_type):
+    if str_type == 'Работа на уроке':
+        return 1
+    elif str_type == 'Самостоятельная работа':
+        return 2
+    elif str_type == 'Контрольная работа':
+        return 3
+    elif str_type == 'Домашняя работа':
+        return 4
+    else:
+        return ' Ошибка '
+
+
 class Grade(models.Model):
     # оценка
     student = models.ForeignKey(Students, on_delete=models.PROTECT)

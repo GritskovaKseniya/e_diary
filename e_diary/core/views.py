@@ -1,6 +1,7 @@
 import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from core.utils import *
@@ -17,7 +18,7 @@ def group_required(*group_names):
 
 
 @login_required
-@group_required('admin', 'student')
+@group_required('student')
 def main(request):
     url_name = request.resolver_match.url_name
     user = request.user
@@ -30,7 +31,7 @@ def main(request):
 
 
 @login_required
-@group_required('admin', 'student')
+@group_required('student')
 def homework(request):
     url_name = request.resolver_match.url_name
     user = request.user
@@ -46,7 +47,7 @@ def homework(request):
 
 
 @login_required
-@group_required('admin', 'student')
+@group_required('student')
 def timetable(request):
     url_name = request.resolver_match.url_name
     user = request.user
@@ -59,26 +60,38 @@ def timetable(request):
 
 
 @login_required
-@group_required('admin', 'student')
+@group_required('student')
 def progress_table(request):
     url_name = request.resolver_match.url_name
     user = request.user
     student = Students.objects.filter(user=user)[0]
     user_name = student.name
     user_class = student.user_class
-    return render(request, 'core/progress_table.html', {'url_name': url_name, 'class': user_class, 'name': user_name,
-                                                        'a': get_progress_table(user, user_class)})
+    lessons = OneLesson.objects.filter(a_class=user_class).filter(lesson__is_active=True).values(
+        'lesson__name').distinct().order_by('lesson__name')
+    today = date.today()
+    week = get_week(today)
+    week_date = get_week_with_weekday(today)
+    if request.GET.get('date') is not None:
+        week = get_week(datetime.strptime(request.GET.get('date'), '%Y-%m-%d'))
+        week_date = get_week_with_weekday(datetime.strptime(request.GET.get('date'), '%Y-%m-%d'))
+    return render(request, 'core/progress_table.html',
+                  {'url_name': url_name, 'class': user_class, 'name': user_name,
+                   'week': week_date[:-2],
+                   'grades': get_grades_for_quarter(lessons, week[:-2], user),
+                   'weekday_string': first_and_last_weekday_string(week)})
 
 
 @login_required
-@group_required('admin', 'student')
+@group_required('student')
 def grade(request):
     url_name = request.resolver_match.url_name
     user = request.user
     student = Students.objects.filter(user=user)[0]
     user_name = student.name
     user_class = student.user_class
-    lessons = OneLesson.objects.filter(a_class=user_class).filter(lesson__is_active=True).values('lesson__name').distinct()
+    lessons = OneLesson.objects.filter(a_class=user_class).filter(lesson__is_active=True).values(
+        'lesson__name').distinct().order_by('lesson__name')
     today = date.today()
     week = get_week(today)
     week_date = get_week_with_weekday(today)
@@ -86,7 +99,8 @@ def grade(request):
         week = get_week(datetime.strptime(request.GET.get('date'), '%Y-%m-%d'))
         week_date = get_week_with_weekday(datetime.strptime(request.GET.get('date'), '%Y-%m-%d'))
     return render(request, 'core/grade.html', {'url_name': url_name, 'class': user_class, 'name': user_name,
-                                               'week': week_date[:-1], 'grades': get_grades_for_week(lessons, week, user),
+                                               'week': week_date[:-2],
+                                               'grades': get_grades_for_week(lessons, week[:-2], user),
                                                'weekday_string': first_and_last_weekday_string(week)})
 
 

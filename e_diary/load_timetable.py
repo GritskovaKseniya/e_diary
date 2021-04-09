@@ -37,9 +37,10 @@ def add_timetable():
         except BaseException:
             old_lesson = OneLesson.objects.filter(date=lesson.date, lesson_time=lesson.lesson_time,
                                                   a_class=lesson.a_class)[0]
-            old_lesson.delete()
+            # old_lesson.delete()
             print("EXCEPT" + lesson.lesson + lesson.date)
             # lesson.save()
+
 
 if __name__ == "__main__":
     add_timetable();

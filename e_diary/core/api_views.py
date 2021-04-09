@@ -27,14 +27,6 @@ def comment_update(request):
     return response
 
 
-# todo: this function
-@csrf_exempt
-def grades_update(request):
-    request_json = json.loads(request.body)
-    response = JsonResponse({})
-    return response
-
-
 def username_get(request):
     user = User.objects.filter(id=int(request.user.id))[0]
     teacher_name = Teachers.objects.filter(user=user.id)[0].name
@@ -149,3 +141,72 @@ def grades_value(request):
     return response
 
 
+@csrf_exempt
+def grades_update(request):
+    teacher = Teachers.objects.filter(user=User.objects.filter(id=int(request.user.id))[0])[0]
+    request_json = json.loads(request.body)  # переводит параметры POST запроса в json
+    student = Students.objects.filter(name=request_json.get('student'))[0]
+    print("1 ", student)
+    request_date = datetime.strptime(request_json.get('date'), '%Y-%m-%d')
+    print("2 ", request_date)
+    lesson = request_json.get('lesson')
+
+    array = OneLesson.objects.all().filter(teacher=teacher).filter(date=request_date)
+    for item in array:
+        lesson_str = str(item.a_class.number) + ' класс ' + str(item.lesson.name)
+        if lesson_str == str(lesson):
+            lesson = item
+    print("3 ", lesson)
+    """
+    grades = request_json.get('grades')
+    db_grades = Grade.objects.all().filter(lesson=lesson, student=student)
+    for grade in grades:
+        if grade['grade'] == 0:
+            if grade['type'] in db_grades:
+                # TODO: delete Grade object
+        elif grade['type'] in db_grades:
+            if grade['grade'] != db_grades.filter(grade['type']).value:
+                # TODO: update Grade object: only grade.value
+        elif:
+            # TODO: create new object: student, lesson, date, grade.value, grade,type
+    """
+    """
+            print("7 ", grade, grade['type'])
+            print("222", norm_view_for(db_grade.grade_type))
+            res = {key: value for (key, value) in grade.items() if value == norm_view_for(db_grade.grade_type)}
+            print("444", res['type'])
+            # print(grade[str(norm_view_for(db_grade.grade_type))])
+            # print("4 ", grade)
+            # print("6 ", db_grade)
+            # print(db_grade.grade_type, ";", from_str_to_choise(grade['type']))
+            # print(db_grade.grade, ";", grade['grade'])
+
+                if db_grade.grade_type == from_str_to_choise(grade['type']):
+                    print("T", db_grade.grade_type, ";", from_str_to_choise(grade['type']))
+                    print("TT", db_grade.grade, ";", grade['grade'])
+                    if db_grade.grade != grade['grade']:
+                        print("TTT", db_grade.grade_type, ";", from_str_to_choise(grade['type']))
+                        print("TTT", db_grade.grade, ";", grade['grade'])
+                        db_grade.grade = int(grade['grade'])
+                        db_grade.grade_date = date.today
+                    print("ОБНОВЛЕННАЯ ОЦЕНКА", db_grade.student, db_grade.lesson, db_grade.grade,
+                          norm_view_for(db_grade.grade_type))
+                    # db_grade.save()
+                    break
+
+                elif db_grade.grade_type != from_str_to_choise(grade['type']):
+                    if db_grade.grade != grade['grade']:
+                    print(db_grade.grade, 'AND', grade['grade'], "; ", norm_view_for(db_grade.grade_type),
+                          grade['type'])
+                    the_grade = Grade(student=student, lesson=lesson, grade=int(grade['grade']),
+                                      grade_type=from_str_to_choise(grade['type']))
+                    # the_grade.save()
+                    print("НОВАЯ ОЦЕНКА", the_grade.student, the_grade.lesson, the_grade.grade,
+                          norm_view_for(the_grade.grade_type))
+                    break
+
+        elif grade['grade'] == 0:
+            print("УДАЛЕННАЯ ОЦЕНКА", the_grade.student, the_grade.lesson, the_grade.grade,
+                    norm_view_for(the_grade.grade_type))
+    """
+    return JsonResponse({})

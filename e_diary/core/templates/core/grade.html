@@ -4,6 +4,12 @@
 
 {% block content %}
 <div class="container">
+    <div class="container">
+        <h6 class="grade-hw">Оценка за домашнее задание </h6>
+        <h6 class="grade-t">Оценка за самостоятельную работу </h6>
+        <h6 class="grade-cw">Оценка за работу на уроке </h6>
+        <h6 class="grade-ct">Оценка за контрольную работу </h6>
+    </div>
   <div class="row">
       <div class="col-2"><button type="button" class="btn btn-outline-dark" onclick="rewindDate('prev', 7)"><<</button></div>
       <div class="col text-center"><h4>Оценки на {{weekday_string}}</h4></div>
@@ -40,12 +46,6 @@
         </tr>
       {% endfor %}
   </table>
-    <div class="container">
-        <h6 class="grade-hw">Оценка за домашнее задание </h6>
-        <h6 class="grade-t">Оценка за самостоятельную работу </h6>
-        <h6 class="grade-cw">Оценка за работу на уроке </h6>
-        <h6 class="grade-ct">Оценка за контрольную работу </h6>
-    </div>
 </div>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 {% endblock %}

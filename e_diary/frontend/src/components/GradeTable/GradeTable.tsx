@@ -9,9 +9,10 @@ import './GradeTable.css'
 export function GradeTable(props: any) {
 
   const handleGradesSubmit = () => (values: any) => {
-    updateGrades()
+    console.log(values.grades)
+    updateGrades(values.date, values.student, values.lesson, values.grades)
       .then(() => {
-        props.onScheduleChange()
+        props.onGradeTableChange()
       })
   }
 
@@ -24,13 +25,23 @@ export function GradeTable(props: any) {
           if (time) {
             // console.log("DEBUG", time)
             // console.log("DEBUG 2", student.student)
-            return (<td><AppModalGrade date={lessonDate} 
-              name={student.student}  
-              grades={student.grades.filter((grade: any) => (lessonDate === grade.date))}
+            return (
+              <td><AppModalGrade 
+                date={lessonDate} 
+                name={student.student}  
+                grades={student.grades.filter((grade: any) => (lessonDate === grade.date))}
+                lesson={props.lesson}
+                onSubmit={handleGradesSubmit()}
+              />
+              </td>)
+          } else {return (
+            <td><AppModalGrade 
+              date={lessonDate} 
+              name={student.student} 
+              grades={[]}
               lesson={props.lesson}
-              onSubmit={handleGradesSubmit()}/></td>)
-          } else {return (<td><AppModalGrade date={lessonDate} 
-            name={student.student} grades={" "}/></td>)}
+              onSubmit={handleGradesSubmit()}/>
+            </td>)}
       })
     }
 

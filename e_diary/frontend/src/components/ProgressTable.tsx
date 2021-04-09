@@ -61,6 +61,14 @@ export function ProgressTable() {
           </Col>
         </Form.Group>
       </Form>
-      {gradeList && <GradeTable date={gradeList.data[0]} list={gradeList.data[1]} lesson={selected}/>}
+      {gradeList && <GradeTable date={gradeList.data[0]} 
+        list={gradeList.data[1]} 
+        lesson={selected} 
+        onGradeTableChange={() => {
+          getGradeList(selected!)
+            .then((gradeList) => {
+              setGradeList(gradeList)
+          })
+        }}/>}
     </Container>)
 }

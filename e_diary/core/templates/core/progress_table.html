@@ -1,27 +1,60 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
 {% block title %}Успеваемость таблица{% endblock %}
 
 {% block content %}
 <div class="container">
+    <div class="container">
+        <h6 class="grade-hw">Оценка за домашнее задание </h6>
+        <h6 class="grade-t">Оценка за самостоятельную работу </h6>
+        <h6 class="grade-cw">Оценка за работу на уроке </h6>
+        <h6 class="grade-ct">Оценка за контрольную работу </h6>
+    </div>
   <div class="row">
-      <div class="col text-center"><h4>Успеваемость</h4></div>
+      <div class="col-2"><button type="button" class="btn btn-outline-dark" onclick="rewindDate('prev', 7)"><<</button></div>
+      <div class="col text-center"><h4>Оценки на {{weekday_string}}</h4></div>
+      <div class="col-2"><button type="button" class="btn btn-outline-dark float-right" onclick="rewindDate('next', 7)">>></button></div>
   </div>
-
-  <table class="table table-bordered table-striped mt-3">
-  <tr><th>Предмет</th><th>Мой ср. балл за месяц</th><th>Ср. балл класса за месяц</th><th>Мой ср. б. за 1 ч</th><th>Ср. б. класса за 1 ч</th><th>Мой ср. б. за 2 ч</th><th>Ср. б. класса за 2 ч</th><th>Мой ср. б. за семестр</th><th>Ср. б. класса за семестр</th></tr>
-      {% for t in a %}
-      <div class=" name-output">
+  <table class="table table-bordered table-striped mt-5">
       <tr>
-          {%for z in t%}
-          <td>{{z}}</td>
-          {%endfor%}
-      </tr>
+          <th class="width-20">Предмет</th>
+          {% for day in week %}
+            <th class="width-20">{{day.date}}</th>
           {% endfor %}
-      </div>
+          <th class="width-20">Средний бал</th>
+      </tr>
+      {% for lesson in grades %}
+        <tr>
+            <td>{{lesson.lesson}}</td>
+                {% for day in lesson.days_and_grades %}
+                    <th>
+                        {% for grade in day.grades %}
+                            {% if grade.type == 4 %}
+                                <span class="grade-hw font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                            {% if grade.type == 3 %}
+                                <span class="grade-ct font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                            {% if grade.type == 2 %}
+                                <span class="grade-t font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                            {% if grade.type == 1 %}
+                                <span class="grade-cw font-size-lg">{{grade.value}}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </th>
+                {% endfor %}
+            {% if lesson.GPA != 0 %}
+                <th class="font-size-lg">{{lesson.GPA}}</th>
+            {% endif %}
+            {% if lesson.GPA == 0 %}
+                <th class="font-size-lg"></th>
+            {% endif %}
+        </tr>
+      {% endfor %}
   </table>
 </div>
-
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 {% endblock content %}
 
 

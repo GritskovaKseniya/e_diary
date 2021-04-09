@@ -74,7 +74,7 @@
         var seconds = zero_first_format(current_datetime.getSeconds());
         let dayOfTheWeek = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота']
 
-        return day+"."+month+"."+year+" "+ dayOfTheWeek[current_datetime.getUTCDay()]+" "+hours+":"+minutes;
+        return day+"."+month+"."+year+" "+ dayOfTheWeek[current_datetime.getUTCDay()]+" "+hours+":"+minutes+":"+seconds;
     }
 
     /* update date every second */

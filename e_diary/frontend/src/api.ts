@@ -69,13 +69,13 @@ export async function getGradesValue() {
         .then(resp => resp.json());
 }
 
-export async function updateGrades() {
+export async function updateGrades(date: string, student: string, lesson: string, grades: any) {
     return fetch(`${BASE_API_URL}/grade/update`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
         },
-        body: '',
+        body: JSON.stringify({date, student, lesson, grades}),
     })
         .then(resp => resp.json());
 }
