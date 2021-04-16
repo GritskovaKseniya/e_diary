@@ -26,8 +26,15 @@ def main(request):
     user_name = student.name
     user_class = student.user_class
     today = date.today()
+    day = 'сегодня'
+    if request.GET.get('date') is not None:
+        today = datetime.strptime(request.GET.get('date'), '%Y-%m-%d')
+
+    if today != date.today():
+        day = today.strftime('%d.%m.%Y')
     return render(request, 'core/main.html', {'url_name': url_name, 'class': user_class, 'name': user_name,
-                                              'timetable': get_timetable(today, user_class)})
+                                              'timetable': get_timetable(today, user_class),
+                                              'day': day})
 
 
 @login_required
@@ -55,8 +62,11 @@ def timetable(request):
     user_name = student.name
     user_class = student.user_class
     today = date.today()
+    if request.GET.get('date') is not None:
+        today = datetime.strptime(request.GET.get('date'), '%Y-%m-%d')
     return render(request, 'core/timetable.html', {'url_name': url_name, 'class': user_class, 'name': user_name,
-                                                   'timetable': get_timetable_week(today, user_class)})
+                                                   'timetable': get_timetable_week(today, user_class),
+                                                   'week': get_week_date(today)})
 
 
 @login_required
@@ -70,16 +80,17 @@ def progress_table(request):
     lessons = OneLesson.objects.filter(a_class=user_class).filter(lesson__is_active=True).values(
         'lesson__name').distinct().order_by('lesson__name')
     today = date.today()
-    week = get_week(today)
-    week_date = get_week_with_weekday(today)
+    quarter = get_quarter(today)
+    quarter_days = get_quarter_days(quarter)
     if request.GET.get('date') is not None:
-        week = get_week(datetime.strptime(request.GET.get('date'), '%Y-%m-%d'))
-        week_date = get_week_with_weekday(datetime.strptime(request.GET.get('date'), '%Y-%m-%d'))
+        quarter = get_quarter(datetime.strptime(request.GET.get('date'), '%Y-%m-%d').date())
+        quarter_days = get_quarter_days(quarter)
+    quarter_date = get_grades_for_quarter(lessons, quarter, user)
     return render(request, 'core/progress_table.html',
                   {'url_name': url_name, 'class': user_class, 'name': user_name,
-                   'week': week_date[:-2],
-                   'grades': get_grades_for_quarter(lessons, week[:-2], user),
-                   'weekday_string': first_and_last_weekday_string(week)})
+                   'quarter': quarter_days,
+                   'grades': quarter_date,
+                   'quarter_number': quarter.quarter_number})
 
 
 @login_required

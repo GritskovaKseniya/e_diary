@@ -3,11 +3,33 @@
 {% block title %}Домашнее задание{% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="row">
-      <div class="col-2"><button type="button" class="btn btn-outline-dark" onclick="rewindDate('prev',1)"><<</button></div>
-      <div class="col text-center"><h4>Расписание на {{date}}</h4></div>
-      <div class="col-2"><button type="button" class="btn btn-outline-dark float-right" onclick="rewindDate('next',1)">>></button></div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary" onclick="rewindDate('prev',1)">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   fill="currentColor"
+                   class="bi bi-chevron-left"
+                   viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+              </svg>
+          </button>
+      </div>
+      <div class="col center"><h4>Расписание на {{date}}</h4></div>
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary left" onclick="rewindDate('next',1)">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 fill="currentColor"
+                 class="bi bi-chevron-right"
+                 viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+      </div>
   </div>
   <table class="table table-bordered table-striped mt-3">
       <tr><th class="width-20">№</th><th class="width-120">Время</th><th class="width-230">Урок</th><th>Домашнее задание</th><th>Комментарий преподавателя</th></tr>

@@ -156,3 +156,9 @@ class Grade(models.Model):
     class Meta:
         verbose_name = 'Оценка'
         verbose_name_plural = 'Оценки'
+
+
+class DateSlot(models.Model):
+    quarter_number = models.IntegerField()
+    date_begin = models.DateField(unique=True)
+    date_end = models.DateField(unique=True)

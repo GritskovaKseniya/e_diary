@@ -4,6 +4,30 @@
   padding: 0px;
 }
 
+.vertical {
+    display: inline flow-root;
+    transform: rotate(-90deg);
+}
+
+.left {
+    left: 0px;
+    text-align: left;
+    text-align: center;
+}
+
+.center{
+    justify-content: center;
+    align-content: center;
+    flex-direction:column;
+    text-align: center;
+}
+
+.vertical > div {
+    margin: 0px;
+    padding: 0px;
+    white-space: nowrap;
+}
+
 .font-size-lg{
     font-size: large;
 }

@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react"
-import { Col, Container, Form, Row } from "react-bootstrap"
-import { lessonsAndClassesListGet, getGradeList } from "../api"
+import React, { useState, useEffect } from "react"
+import { Col, Container, Form, Row, Button } from "react-bootstrap"
+import { lessonsAndClassesListGet, getGradeList, getQuarter} from "../api"
 import { GradeTable } from "./GradeTable/GradeTable"
 import { AppAlertInfo} from "./AppAlert/AppAlertInfo"
+import rightArrow from '../rightArrow.svg'
+import leftArrow from '../leftArrow.svg'
 
 export function ProgressTable() {
+  
   const [lessonsList, setLessonsList] = useState<any>('')
   const [selected, setSelected] = useState<string | null>(null)
   const [gradeList, setGradeList] = useState<any>(null)
-
+  const [quarter, setQuarter] = useState<number | null>(null)
+  console.log(quarter)
   useEffect(() => {
     lessonsAndClassesListGet()
       .then((lessonsList) => {
@@ -18,14 +22,21 @@ export function ProgressTable() {
   }, [])
 
   useEffect(() => {
-    if (selected) {
-      getGradeList(selected)
+    getQuarter()
+      .then((result) => {
+        setQuarter(result.quarter)
+      })
+  }, [])
+
+  useEffect(() => {
+    if (selected && quarter) {
+      getGradeList(selected, quarter)
         .then((gradeList) => {
           setGradeList(gradeList)
           console.log(gradeList)
         })
     }
-  }, [selected])
+  }, [selected, quarter])
 
   // DEBUG
   if (gradeList) {
@@ -40,7 +51,30 @@ export function ProgressTable() {
 
   return( 
     <Container fluid>
-      <h2>Журнал (Текущая четверть)</h2>
+      <Row className="center m-2">
+          <Col>
+            <Button variant="btn-outline-secondary"
+              onClick={() => { 
+                if (quarter! > 1){
+                  setQuarter(quarter!-1)
+                }
+              }}>
+              <img src={leftArrow} alt="leftArrow" />
+            </Button>
+          </Col>
+          <Col>
+            <h4>{quarter} четверть.</h4>
+          </Col>
+          <Col>
+            <Button variant="btn-outline-secondary"
+              onClick={() => { if (quarter! < 4){
+                setQuarter(quarter!+1)
+              }
+            }}>
+              <img src={rightArrow} alt="rightArrow" />
+            </Button>
+          </Col>
+        </Row>
       <AppAlertInfo />
       <Form className="mt-2">
         <Form.Group as={Row} controlId="formPlaintextEmail">
@@ -65,7 +99,7 @@ export function ProgressTable() {
         list={gradeList.data[1]} 
         lesson={selected} 
         onGradeTableChange={() => {
-          getGradeList(selected!)
+          getGradeList(selected!, quarter!)
             .then((gradeList) => {
               setGradeList(gradeList)
           })

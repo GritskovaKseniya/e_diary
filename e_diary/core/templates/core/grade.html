@@ -3,19 +3,41 @@
 {% block title %}Оценки{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="container">
-        <h6 class="grade-hw">Оценка за домашнее задание </h6>
-        <h6 class="grade-t">Оценка за самостоятельную работу </h6>
-        <h6 class="grade-cw">Оценка за работу на уроке </h6>
-        <h6 class="grade-ct">Оценка за контрольную работу </h6>
-    </div>
-  <div class="row">
-      <div class="col-2"><button type="button" class="btn btn-outline-dark" onclick="rewindDate('prev', 7)"><<</button></div>
-      <div class="col text-center"><h4>Оценки на {{weekday_string}}</h4></div>
-      <div class="col-2"><button type="button" class="btn btn-outline-dark float-right" onclick="rewindDate('next', 7)">>></button></div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary" onclick="rewindDate('prev',7)">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   fill="currentColor"
+                   class="bi bi-chevron-left"
+                   viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+              </svg>
+          </button>
+      </div>
+      <div class="col center"><h4>Оценки на {{weekday_string}}</h4></div>
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary left" onclick="rewindDate('next',7)">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 fill="currentColor"
+                 class="bi bi-chevron-right"
+                 viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+      </div>
   </div>
-  <table class="table table-bordered table-striped mt-5">
+    <div class="row center mt-3">
+        <div class="alert alert-success" role="alert">
+            <b><span class="grade-hw">Оценка за домашнее задание </span><span class="grade-t">Оценка за самостоятельную работу <br></span>
+                <span class="grade-cw">Оценка за работу на уроке </span><span class="grade-ct">Оценка за контрольную работу </span></b>
+        </div>
+    </div>
+  <table class="table table-bordered table-striped mt-3">
       <tr>
           <th class="width-20">Предмет</th>
           {% for day in week %}

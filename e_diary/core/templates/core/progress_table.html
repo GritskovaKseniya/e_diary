@@ -3,56 +3,84 @@
 {% block title %}Успеваемость таблица{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="container">
-        <h6 class="grade-hw">Оценка за домашнее задание </h6>
-        <h6 class="grade-t">Оценка за самостоятельную работу </h6>
-        <h6 class="grade-cw">Оценка за работу на уроке </h6>
-        <h6 class="grade-ct">Оценка за контрольную работу </h6>
-    </div>
-  <div class="row">
-      <div class="col-2"><button type="button" class="btn btn-outline-dark" onclick="rewindDate('prev', 7)"><<</button></div>
-      <div class="col text-center"><h4>Оценки на {{weekday_string}}</h4></div>
-      <div class="col-2"><button type="button" class="btn btn-outline-dark float-right" onclick="rewindDate('next', 7)">>></button></div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary" onclick="rewindDate('prev',49)">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   fill="currentColor"
+                   class="bi bi-chevron-left"
+                   viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+              </svg>
+          </button>
+      </div>
+      <div class="col center"><h4>Оценки на {{quarter_number}} четверть</h4></div>
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary left" onclick="rewindDate('next',49)">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 fill="currentColor"
+                 class="bi bi-chevron-right"
+                 viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+      </div>
   </div>
-  <table class="table table-bordered table-striped mt-5">
-      <tr>
-          <th class="width-20">Предмет</th>
-          {% for day in week %}
-            <th class="width-20">{{day.date}}</th>
-          {% endfor %}
-          <th class="width-20">Средний бал</th>
-      </tr>
-      {% for lesson in grades %}
+    <div class="row center mt-3">
+        <div class="alert alert-success" role="alert">
+            <b><span class="grade-hw">Оценка за домашнее задание </span><span class="grade-t">Оценка за самостоятельную работу <br></span>
+                <span class="grade-cw">Оценка за работу на уроке </span><span class="grade-ct">Оценка за контрольную работу </span></b>
+        </div>
+    </div>
+  <div class="table-responsive ">
+      <table class="table table-bordered table-striped table-fixed mt-3">
         <tr>
-            <td>{{lesson.lesson}}</td>
-                {% for day in lesson.days_and_grades %}
-                    <th>
-                        {% for grade in day.grades %}
-                            {% if grade.type == 4 %}
-                                <span class="grade-hw font-size-lg">{{grade.value}}</span>
-                            {% endif %}
-                            {% if grade.type == 3 %}
-                                <span class="grade-ct font-size-lg">{{grade.value}}</span>
-                            {% endif %}
-                            {% if grade.type == 2 %}
-                                <span class="grade-t font-size-lg">{{grade.value}}</span>
-                            {% endif %}
-                            {% if grade.type == 1 %}
-                                <span class="grade-cw font-size-lg">{{grade.value}}</span>
-                            {% endif %}
-                        {% endfor %}
-                    </th>
-                {% endfor %}
-            {% if lesson.GPA != 0 %}
-                <th class="font-size-lg">{{lesson.GPA}}</th>
-            {% endif %}
-            {% if lesson.GPA == 0 %}
-                <th class="font-size-lg"></th>
-            {% endif %}
+            <th class="width-20">Предмет</th>
+            {% for day in quarter %}
+                <th style="padding: 35px 0px 35px 0px;">
+                    <div class="vertical">
+                        <div>{{day.date}}</div>
+                    </div>
+                </th>
+            {% endfor %}
+            <th class="width-20">Средний бал</th>
         </tr>
-      {% endfor %}
-  </table>
+        {% for lesson in grades %}
+            <tr>
+                <td>{{lesson.lesson}}</td>
+                    {% for day in lesson.days_and_grades %}
+                        <th>
+                            {% for grade in day.grades %}
+                                {% if grade.type == 4 %}
+                                    <span class="grade-hw font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                                {% if grade.type == 3 %}
+                                    <span class="grade-ct font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                                {% if grade.type == 2 %}
+                                    <span class="grade-t font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                                {% if grade.type == 1 %}
+                                    <span class="grade-cw font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </th>
+                    {% endfor %}
+                {% if lesson.GPA != 0 %}
+                    <th class="font-size-lg">{{lesson.GPA}}</th>
+                {% endif %}
+                {% if lesson.GPA == 0 %}
+                    <th class="font-size-lg"></th>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+  </div>
 </div>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 {% endblock content %}

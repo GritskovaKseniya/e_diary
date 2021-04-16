@@ -74,6 +74,13 @@ def grade_list(request):
     request_json = json.loads(request.body)  # переводит параметры POST запроса в json
     user = User.objects.filter(id=int(request.user.id))[0]
     teacher = Teachers.objects.filter(user=user.id)[0]
+    out_quarter = request_json.get('quarter')
+    if out_quarter > 4:
+        out_quarter = 4
+    if out_quarter < 1:
+        out_quarter = 1
+    quarter = DateSlot.objects.filter(quarter_number=out_quarter)[0]
+
     all_grades = []
     select_lesson = ""
     select_class = 0
@@ -89,7 +96,9 @@ def grade_list(request):
     students = Students.objects.all().filter(user_class=select_class).order_by('name')
     # print(students)
     # получаю все уроки этого учителя и этого класса
-    selected_lessons = OneLesson.objects.all().filter(teacher=teacher).filter(lesson=select_lesson).order_by('date')
+    selected_lessons = OneLesson.objects.all().filter(teacher=teacher, lesson=select_lesson).order_by('date')
+    if quarter:
+        selected_lessons = selected_lessons.filter(date__range=(quarter.date_begin, quarter.date_end))
     lessons_date = []
     lessons_date_test = []
     for student in students:
@@ -104,12 +113,15 @@ def grade_list(request):
                 lessons_date_test.append({"date": lesson.date, "type": norm_view_for(grade.grade_type)})
                 # print("TMP", tmp)
         all_grades.append({'student': student.name, 'grades': tmp})
-    # print("ALL GRADES: ", all_grades)
-    # print("ALL DATES: ", sorted(list(set(lessons_date))))
-    # print("ALL DATES TEST: ", lessons_date_test)
     response = JsonResponse({"data": [{"gradeLists": all_grades}, {"lessonsDate": sorted(list(set(lessons_date)))}]},
                             safe=False, json_dumps_params={'ensure_ascii': False})
     return response
+
+
+def get_quarter_f(request):
+    today = date.today()
+    quarter = get_quarter(today)
+    return JsonResponse({'quarter': quarter.quarter_number}, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
 def students_class_list(request):
@@ -146,9 +158,7 @@ def grades_update(request):
     teacher = Teachers.objects.filter(user=User.objects.filter(id=int(request.user.id))[0])[0]
     request_json = json.loads(request.body)  # переводит параметры POST запроса в json
     student = Students.objects.filter(name=request_json.get('student'))[0]
-    print("1 ", student)
     request_date = datetime.strptime(request_json.get('date'), '%Y-%m-%d')
-    print("2 ", request_date)
     lesson = request_json.get('lesson')
 
     array = OneLesson.objects.all().filter(teacher=teacher).filter(date=request_date)
@@ -156,57 +166,25 @@ def grades_update(request):
         lesson_str = str(item.a_class.number) + ' класс ' + str(item.lesson.name)
         if lesson_str == str(lesson):
             lesson = item
-    print("3 ", lesson)
-    """
+
     grades = request_json.get('grades')
     db_grades = Grade.objects.all().filter(lesson=lesson, student=student)
     for grade in grades:
-        if grade['grade'] == 0:
-            if grade['type'] in db_grades:
-                # TODO: delete Grade object
-        elif grade['type'] in db_grades:
-            if grade['grade'] != db_grades.filter(grade['type']).value:
-                # TODO: update Grade object: only grade.value
-        elif:
-            # TODO: create new object: student, lesson, date, grade.value, grade,type
-    """
-    """
-            print("7 ", grade, grade['type'])
-            print("222", norm_view_for(db_grade.grade_type))
-            res = {key: value for (key, value) in grade.items() if value == norm_view_for(db_grade.grade_type)}
-            print("444", res['type'])
-            # print(grade[str(norm_view_for(db_grade.grade_type))])
-            # print("4 ", grade)
-            # print("6 ", db_grade)
-            # print(db_grade.grade_type, ";", from_str_to_choise(grade['type']))
-            # print(db_grade.grade, ";", grade['grade'])
+        already_has = False
+        for gr in db_grades:
+            if from_str_to_choise(grade['type']) == gr.grade_type:
+                already_has = True
+                if grade['grade'] == 0:
+                    # delete gr
+                    gr.delete()
+                else:
+                    # update gr
+                    gr.grade = grade['grade']
+                    gr.save()
+        if not already_has and grade['grade'] != 0:
+            # add new grade
+            new_grade = Grade(student=student, lesson=lesson, grade=grade['grade'],
+                              grade_type=from_str_to_choise(grade['type']))
+            new_grade.save()
 
-                if db_grade.grade_type == from_str_to_choise(grade['type']):
-                    print("T", db_grade.grade_type, ";", from_str_to_choise(grade['type']))
-                    print("TT", db_grade.grade, ";", grade['grade'])
-                    if db_grade.grade != grade['grade']:
-                        print("TTT", db_grade.grade_type, ";", from_str_to_choise(grade['type']))
-                        print("TTT", db_grade.grade, ";", grade['grade'])
-                        db_grade.grade = int(grade['grade'])
-                        db_grade.grade_date = date.today
-                    print("ОБНОВЛЕННАЯ ОЦЕНКА", db_grade.student, db_grade.lesson, db_grade.grade,
-                          norm_view_for(db_grade.grade_type))
-                    # db_grade.save()
-                    break
-
-                elif db_grade.grade_type != from_str_to_choise(grade['type']):
-                    if db_grade.grade != grade['grade']:
-                    print(db_grade.grade, 'AND', grade['grade'], "; ", norm_view_for(db_grade.grade_type),
-                          grade['type'])
-                    the_grade = Grade(student=student, lesson=lesson, grade=int(grade['grade']),
-                                      grade_type=from_str_to_choise(grade['type']))
-                    # the_grade.save()
-                    print("НОВАЯ ОЦЕНКА", the_grade.student, the_grade.lesson, the_grade.grade,
-                          norm_view_for(the_grade.grade_type))
-                    break
-
-        elif grade['grade'] == 0:
-            print("УДАЛЕННАЯ ОЦЕНКА", the_grade.student, the_grade.lesson, the_grade.grade,
-                    norm_view_for(the_grade.grade_type))
-    """
     return JsonResponse({})

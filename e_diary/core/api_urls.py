@@ -12,5 +12,6 @@ urlpatterns = [
     path('lessonsandclasses/list/get', api_views.lessons_and_classes_list_get),
     path('students/listname/get', api_views.students_class_list),
     path('grade_list/get', api_views.grade_list),
-    path('grade/value', api_views.grades_value)
+    path('grade/value', api_views.grades_value),
+    path('quarter/get', api_views.get_quarter_f),
 ]

@@ -9,7 +9,6 @@ import './GradeTable.css'
 export function GradeTable(props: any) {
 
   const handleGradesSubmit = () => (values: any) => {
-    console.log(values.grades)
     updateGrades(values.date, values.student, values.lesson, values.grades)
       .then(() => {
         props.onGradeTableChange()
@@ -17,14 +16,10 @@ export function GradeTable(props: any) {
   }
 
   function getScheduleRow(student: any, key: number){
-    
     function getScheduleCol(){
       return props.list.lessonsDate.map((lessonDate: string) => {
         const time = student.grades.find((grade: any) => (lessonDate === grade.date))
-        
           if (time) {
-            // console.log("DEBUG", time)
-            // console.log("DEBUG 2", student.student)
             return (
               <td><AppModalGrade 
                 date={lessonDate} 
@@ -55,8 +50,6 @@ export function GradeTable(props: any) {
       </tr>
     )
   }
-
-  console.log(props)
   
   return (
       <Table bordered hover className="mt-20">

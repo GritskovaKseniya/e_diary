@@ -24,13 +24,31 @@ export async function updateHomework(lessonId: number, homework: string) {
         .then(resp => resp.json());
 }
 
-export async function getGradeList(lesson: string) {
+export async function getGradeList(lesson: string, quarter: number) {
     return fetch(`${BASE_API_URL}/grade_list/get`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
         },
-        body: JSON.stringify({lesson}),
+        body: JSON.stringify({lesson, quarter}),
+        credentials: 'same-origin'
+    })
+        .then(resp => resp.json());
+        
+}
+
+export async function getQuarter() {
+    return fetch(`${BASE_API_URL}/quarter/get`, {credentials: 'same-origin'})
+    .then(resp => resp.json());
+}
+
+export async function changeQuarter(quarter: Number) {
+    return fetch(`${BASE_API_URL}/quarter/change`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify({quarter}),
         credentials: 'same-origin'
     })
         .then(resp => resp.json());
