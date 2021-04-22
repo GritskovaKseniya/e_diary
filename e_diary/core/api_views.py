@@ -100,19 +100,23 @@ def grade_list(request):
     if quarter:
         selected_lessons = selected_lessons.filter(date__range=(quarter.date_begin, quarter.date_end))
     lessons_date = []
-    lessons_date_test = []
     for student in students:
         tmp = []
+        number = 1
+        amount = 0.0
+        GPA = 0
         for lesson in selected_lessons:
             student_grade_list = Grade.objects.all().filter(lesson=lesson).filter(student=student)
             # print(student_grade_list)
             lessons_date.append(lesson.date)
 
             for grade in student_grade_list:
+                number = number + 1
+                amount = amount + float(grade.grade)
                 tmp.append({'date': lesson.date, 'grade': grade.grade, 'type': norm_view_for(grade.grade_type)})
-                lessons_date_test.append({"date": lesson.date, "type": norm_view_for(grade.grade_type)})
-                # print("TMP", tmp)
-        all_grades.append({'student': student.name, 'grades': tmp})
+        if number != 1:
+            GPA = amount / (number - 1)
+        all_grades.append({'student': student.name, 'grades': tmp, 'GPA': str(round(GPA, 1))})
     response = JsonResponse({"data": [{"gradeLists": all_grades}, {"lessonsDate": sorted(list(set(lessons_date)))}]},
                             safe=False, json_dumps_params={'ensure_ascii': False})
     return response

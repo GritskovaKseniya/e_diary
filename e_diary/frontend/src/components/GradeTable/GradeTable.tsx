@@ -26,17 +26,17 @@ export function GradeTable(props: any) {
                 name={student.student}  
                 grades={student.grades.filter((grade: any) => (lessonDate === grade.date))}
                 lesson={props.lesson}
-                onSubmit={handleGradesSubmit()}
-              />
+                onSubmit={handleGradesSubmit()}/>
               </td>)
-          } else {return (
-            <td><AppModalGrade 
-              date={lessonDate} 
-              name={student.student} 
-              grades={[]}
-              lesson={props.lesson}
-              onSubmit={handleGradesSubmit()}/>
-            </td>)}
+          } else {
+            return (
+              <td><AppModalGrade 
+                date={lessonDate} 
+                name={student.student} 
+                grades={[]}
+                lesson={props.lesson}
+                onSubmit={handleGradesSubmit()}/>
+              </td>)}
       })
     }
 
@@ -47,6 +47,7 @@ export function GradeTable(props: any) {
           {student.student}
         </td>
         {getScheduleCol()}
+        {student.GPA === "0" ? (<td></td>) : (<td style={{fontWeight: "bolder"}}>{student.GPA}</td>)}
       </tr>
     )
   }
@@ -58,6 +59,7 @@ export function GradeTable(props: any) {
             <th className="width-number">#</th>
             <th className="width-lesson">ФИО</th>
             {props.list.lessonsDate.map((lessonDate: string) => (<th>{moment(lessonDate).format("DD.MM.YYYY")}</th>))}
+            <th>Средний балл</th>
           </tr>
         </thead>
         <tbody>

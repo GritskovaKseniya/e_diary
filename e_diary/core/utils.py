@@ -147,5 +147,5 @@ def get_grades_for_quarter(lessons, quarter, user):
             GPA = 0
             if number != 1:
                 GPA = amount / (number - 1)
-        result.append({'lesson': lesson['lesson__name'], 'days_and_grades': day_array, 'GPA': GPA})
+        result.append({'lesson': lesson['lesson__name'], 'days_and_grades': day_array, 'GPA': round(GPA, 1)})
     return result

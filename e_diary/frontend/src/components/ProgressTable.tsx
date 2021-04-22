@@ -12,7 +12,6 @@ export function ProgressTable() {
   const [selected, setSelected] = useState<string | null>(null)
   const [gradeList, setGradeList] = useState<any>(null)
   const [quarter, setQuarter] = useState<number | null>(null)
-  console.log(quarter)
   useEffect(() => {
     lessonsAndClassesListGet()
       .then((lessonsList) => {
@@ -31,22 +30,14 @@ export function ProgressTable() {
   useEffect(() => {
     if (selected && quarter) {
       getGradeList(selected, quarter)
-        .then((gradeList) => {
-          setGradeList(gradeList)
-          console.log(gradeList)
+        .then((result) => {
+          setGradeList(result)
         })
     }
   }, [selected, quarter])
 
-  // DEBUG
-  if (gradeList) {
-    console.log(gradeList.data[0])
-    console.log(gradeList.data[1])
-  }
-
   function handleChange(e: any){
     setSelected(e.target.value)
-    console.log(e)
   }
 
   return( 
@@ -75,7 +66,7 @@ export function ProgressTable() {
             </Button>
           </Col>
         </Row>
-      <AppAlertInfo />
+      <AppAlertInfo/>
       <Form className="mt-2">
         <Form.Group as={Row} controlId="formPlaintextEmail">
           <Form.Label column sm="2">
