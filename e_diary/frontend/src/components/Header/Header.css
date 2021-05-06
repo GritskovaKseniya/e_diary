@@ -3,3 +3,14 @@
     padding-bottom: 30px;
     padding-top: 0px;
 }
+
+.nav-c{
+    color: rgba(2, 19, 32, 0.616);
+    font-weight: normal;
+}
+
+.selected{
+    color:rgba(2, 19, 32, 0.616);
+    font-weight: bold;
+    text-shadow: rgb(99, 193, 221) 1px 0 10px;
+}
