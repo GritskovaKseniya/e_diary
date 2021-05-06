@@ -1,0 +1,8 @@
+{% extends 'parent/base.html' %}
+{% load static %}
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div>{{text}}</div>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% endblock %}
