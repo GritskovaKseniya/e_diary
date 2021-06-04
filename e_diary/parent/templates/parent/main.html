@@ -1,8 +1,15 @@
 {% extends 'parent/base.html' %}
 {% load static %}
-{% block title %}Главная страница{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
-<div>{{text}}</div>
+<div class="container-fluid">
+    <div style="font-size:larger;">Выберете ученика:</div>
+{%for child in children %}
+    <div class="row mt-2">
+        <a class="btn-ch" href="{% url 'parent:children'%}?name={{child.name}}&class={{child.class}}">{{child.name}}, {{child.class}} класс</a>
+    </div>
+{% endfor %}
+</div>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 {% endblock %}

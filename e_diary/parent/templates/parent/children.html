@@ -1,0 +1,96 @@
+{% extends 'parent/base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-5">
+        <div class="col">
+            <a class="btn-ch" href="{% url 'parent:children'%}?name={{child_name}}&class={{class}}">
+                {{child_name}}. Успеваемость.
+            </a>
+        </div>
+        <div class="col-2">
+            <a class="btn-ch" href="{% url 'parent:main'%}">Назад</a>
+        </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary" onclick="rewindDate('prev',49)">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   fill="currentColor"
+                   class="bi bi-chevron-left"
+                   viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+              </svg>
+          </button>
+      </div>
+      <div class="col center"><h4>Оценки на {{quarter_number}} четверть</h4></div>
+      <div class="col center">
+          <button type="button" class="btn btn-outline-secondary left" onclick="rewindDate('next',49)">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 fill="currentColor"
+                 class="bi bi-chevron-right"
+                 viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+      </div>
+  </div>
+    <div class="row center mt-3">
+        <div class="alert alert-success" role="alert">
+            <b><span class="grade-hw">домашнее задание </span>/<span class="grade-t"> самостоятельная работа </span>/
+                <span class="grade-cw"> работа на уроке </span>/<span class="grade-ct"> контрольная работа</span></b>
+        </div>
+    </div>
+  <div class="table-responsive ">
+      <table class="table table-bordered table-striped table-fixed mt-3">
+        <tr>
+            <th class="width-20">Предмет</th>
+            {% for day in quarter %}
+                <th style="padding: 35px 0px 35px 0px;">
+                    <div class="vertical">
+                        <div>{{day.date}}</div>
+                    </div>
+                </th>
+            {% endfor %}
+            <th class="width-20">Средний бал</th>
+        </tr>
+        {% for lesson in grades %}
+            <tr>
+                <td>{{lesson.lesson}}</td>
+                    {% for day in lesson.days_and_grades %}
+                        <th>
+                            {% for grade in day.grades %}
+                                {% if grade.type == 4 %}
+                                    <span class="grade-hw font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                                {% if grade.type == 3 %}
+                                    <span class="grade-ct font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                                {% if grade.type == 2 %}
+                                    <span class="grade-t font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                                {% if grade.type == 1 %}
+                                    <span class="grade-cw font-size-lg">{{grade.value}}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </th>
+                    {% endfor %}
+                {% if lesson.GPA != 0 %}
+                    <th class="font-size-lg">{{lesson.GPA}}</th>
+                {% endif %}
+                {% if lesson.GPA == 0 %}
+                    <th class="font-size-lg"></th>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% endblock %}
