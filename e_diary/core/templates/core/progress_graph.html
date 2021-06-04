@@ -1,8 +1,9 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
 {% block title %}Успеваемость график{% endblock %}
 
 {% block content %}
 <h4>Успеваемость график </h4>
-
-{% endblock %}
+<a href="{% url 'core:progress_table'%}">Назад</a></a>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% endblock content %}

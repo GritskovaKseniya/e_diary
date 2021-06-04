@@ -32,11 +32,13 @@
       </div>
   </div>
   <table class="table table-bordered table-striped mt-3">
-      <tr><th class="width-number">№</th><th class="width-time">Время</th><th class="width-lesson">Урок</th><th>Домашнее задание</th></tr>
+      <tr><th class="width-number">№</th><th class="width-time">Время</th><th class="width-lesson">Урок</th>
+          <th>Домашнее задание</th><th>Комментарий преподавателя</th></tr>
       {% for lesson in timetable %}
       <div class=" name-output">
       <tr>
-        <td>{{lesson.number}}</td><td>{{lesson.time}}</td><td>{{lesson.title}}</td><td>{{lesson.homework}}</td>
+          <td>{{lesson.number}}</td><td>{{lesson.time}}</td><td>{{lesson.title}}</td>
+          <td>{{lesson.homework}}</td><td>{{lesson.comment}}</td>
       </tr>
       </div>
       {% endfor %}

@@ -95,6 +95,18 @@ def progress_table(request):
 
 @login_required
 @group_required('student')
+def progress_graph(request):
+    url_name = request.resolver_match.url_name
+    user = request.user
+    student = Students.objects.filter(user=user)[0]
+    user_name = student.name
+    user_class = student.user_class
+    return render(request, 'core/progress_graph.html', {'url_name': url_name,
+                                                        'class': user_class, 'name': user_name})
+
+
+@login_required
+@group_required('student')
 def grade(request):
     url_name = request.resolver_match.url_name
     user = request.user

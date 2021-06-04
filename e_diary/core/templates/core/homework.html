@@ -32,7 +32,8 @@
       </div>
   </div>
   <table class="table table-bordered table-striped mt-3">
-      <tr><th class="width-20">№</th><th class="width-120">Время</th><th class="width-230">Урок</th><th>Домашнее задание</th><th>Комментарий преподавателя</th></tr>
+      <tr><th class="width-20">№</th><th class="width-120">Время</th><th class="width-230">Урок</th><th>Домашнее задание</th>
+          <th>Комментарий преподавателя</th></tr>
       {% for lesson in timetable %}
       <tr>
         <td>{{lesson.number}}</td><td>{{lesson.time}}</td><td>{{lesson.title}}</td><td>{{lesson.homework}}</td><td>{{lesson.comment}}</td>
