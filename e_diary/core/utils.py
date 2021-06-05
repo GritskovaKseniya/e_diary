@@ -99,20 +99,24 @@ def first_and_last_weekday_string(week):
 
 def get_quarter(this_day):
     quarter_dates = DateSlot.objects.all()
-    # Using an additional state variable, such as an index variable
-    for idx, quarter_date in enumerate(quarter_dates):
-        # checking exists date in quarter
-        if quarter_date.date_begin <= this_day <= quarter_date.date_end:
-            return quarter_date
-        # checking exists date in this quarter and start of the next quarter
-        elif quarter_date.quarter_number != 1 and quarter_date.quarter_number != 4 and quarter_date.date_begin <= this_day <= quarter_dates[idx + 1].date_begin:
-            return quarter_date
-        # checking exists date in summer vacation (out of 4 quarter)
-        elif quarter_date.quarter_number == 4 and quarter_date.date_end <= this_day:
-            return quarter_date
-        # checking exists date in summer vacation (out of 1 quarter)
-        elif quarter_date.quarter_number == 1 and quarter_date.date_begin >= this_day:
-            return quarter_date
+    if type(this_day) is int:
+        quarter = DateSlot.objects.filter(quarter_number=int(this_day))[0]
+        return quarter
+    else:
+        # Using an additional state variable, such as an index variable
+        for idx, quarter_date in enumerate(quarter_dates):
+            # checking exists date in quarter
+            if quarter_date.date_begin <= this_day <= quarter_date.date_end:
+                return quarter_date
+            # checking exists date in this quarter and start of the next quarter
+            elif quarter_date.quarter_number != 1 and quarter_date.quarter_number != 4 and quarter_date.date_begin <= this_day <= quarter_dates[idx + 1].date_begin:
+                return quarter_date
+            # checking exists date in summer vacation (out of 4 quarter)
+            elif quarter_date.quarter_number == 4 and quarter_date.date_end <= this_day:
+                return quarter_date
+            # checking exists date in summer vacation (out of 1 quarter)
+            elif quarter_date.quarter_number == 1 and quarter_date.date_begin >= this_day:
+                return quarter_date
 
 
 def get_quarter_days(quarter):

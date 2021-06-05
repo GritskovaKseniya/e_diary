@@ -82,8 +82,8 @@ def progress_table(request):
     today = date.today()
     quarter = get_quarter(today)
     quarter_days = get_quarter_days(quarter)
-    if request.GET.get('date') is not None:
-        quarter = get_quarter(datetime.strptime(request.GET.get('date'), '%Y-%m-%d').date())
+    if request.GET.get('quarter') is not None:
+        quarter = get_quarter(int(request.GET.get('quarter')))
         quarter_days = get_quarter_days(quarter)
     quarter_date = get_grades_for_quarter(lessons, quarter, user)
     return render(request, 'core/progress_table.html',

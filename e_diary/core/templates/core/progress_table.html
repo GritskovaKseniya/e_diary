@@ -3,10 +3,10 @@
 {% block title %}Успеваемость таблица{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid" id="quarter" data-quarter="{{quarter_number}}">
     <div class="row">
       <div class="col center">
-          <button type="button" class="btn btn-outline-secondary" onclick="rewindDate('prev',49)">
+          <button type="button" class="btn btn-outline-secondary" onclick="rewindQuarter('prev')">
               <svg xmlns="http://www.w3.org/2000/svg"
                    width="16"
                    height="16"
@@ -19,7 +19,7 @@
       </div>
       <div class="col center"><h4>Оценки на {{quarter_number}} четверть</h4></div>
       <div class="col center">
-          <button type="button" class="btn btn-outline-secondary left" onclick="rewindDate('next',49)">
+          <button type="button" class="btn btn-outline-secondary left" onclick="rewindQuarter('next')">
             <svg xmlns="http://www.w3.org/2000/svg"
                  width="16"
                  height="16"
@@ -37,21 +37,23 @@
                 <span class="grade-cw"> работа на уроке </span>/<span class="grade-ct"> контрольная работа</span></b>
         </div>
     </div>
-  <div class="table-responsive ">
+  <div class="table-responsive table">
       <table class="table table-bordered table-striped table-fixed mt-3">
-        <tr>
-            <th class="width-20">Предмет</th>
-            {% for day in quarter %}
-                <th style="padding: 35px 0px 35px 0px;">
-                    <div class="vertical">
-                        <div>{{day.date}}</div>
-                    </div>
-                </th>
-            {% endfor %}
-            <th class="width-20">Средний бал</th>
-        </tr>
+<!--          <thead style="position: fixed;background: #eee;">-->
+                <tr>
+                    <th class="width-20">Предмет</th>
+                        {% for day in quarter %}
+                        <th style="padding: 35px 0px 35px 0px;">
+                            <div class="vertical">
+                                <div>{{day.date}}</div>
+                            </div>
+                        </th>
+                    {% endfor %}
+                    <th class="width-20">Средний бал</th>
+                </tr>
+<!--          </thead>-->
         {% for lesson in grades %}
-            <tr>
+            <tr style="margin-top: 50px; ">
                 <td>{{lesson.lesson}}</td>
                     {% for day in lesson.days_and_grades %}
                         <th>

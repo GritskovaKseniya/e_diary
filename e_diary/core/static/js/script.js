@@ -18,6 +18,28 @@ function rewindDate(direction, period){
     window.location.search = search.slice(0, -1)
 }
 
+function rewindQuarter(direction){
+    console.log("TEST")
+    let params = GETParamsAsObject()
+    let quarter = $("#quarter").data("quarter");
+
+    if ('quarter' in params){
+        quarter = params.quarter
+    }
+
+    if (direction === 'next' && Number(quarter) !== 4){
+            quarter = Number(quarter) + 1
+    }
+    else if (direction === 'prev' && Number(quarter) !== 1){
+        quarter = quarter - 1
+    }
+
+
+    params.quarter = quarter
+    const search = Object.keys(params).reduce((acc, val) => `${acc}${val}=${params[val]}&`, '?')
+    window.location.search = search.slice(0, -1)
+}
+
 function formatDate (date){
     let day = date.getDate() < 10 ? // дни возвращает от 1
         "0" + date.getDate().toString()
