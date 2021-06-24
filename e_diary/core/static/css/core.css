@@ -42,9 +42,13 @@
     white-space: nowrap;
     vertical-align: middle;
     user-select: none;
-    border: 1px solid ;
+    border: 0;
     border-radius: 6px;
     appearance: none;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #8fa1b173;
 }
 
 .btn-block{
